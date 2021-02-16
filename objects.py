@@ -24,31 +24,14 @@ class Ball(Entity):
         self.vx = vx
         self.vy = vy
 
-    # def move(self, Board):
-    #     if (self.x+self.vx < len(Board[self.y]) and self.x+self.vx >= 0):
-    #         if(Board[self.y][self.x + self.vx] == ' '):
-    #             self.x = self.x+self.vx
-    #         else:
-    #             self.vx = -self.vx
-    #     else:
-    #         self.vx = -self.vx
-    #     if (self.x < len(Board) and self.x >= 0):
-    #         if(Board[self.y + self.vy][self.x] == ' '):
-    #             self.y = self.y+self.vy
-    #         else:
-    #             self.vy = -self.vy
-    #     else:
-    #         self.vy = -self.vy
+    def move(self, Board):
+        self.x = self.x+self.vx
+        self.y = self.y + self.vy
 
 
 class Paddle(Entity):
     def __init__(self, x, y, height, width, color, sprite):
         super().__init__(x, y, height, width, color, sprite)
 
-        # for i in range(l-1):
-        #     self.len = self.len + "="
-# a = Entity("|", Fore.GREEN)
-# ball1 = Ball(10, 10, 1, 1, 1, 1, Fore.RED, "⬤")
-# print(ball1.color+ball1.sprite+Fore.RESET)
-# paddle = Paddle(10, 10, 1, 1, Fore.GREEN, "▒")
-# print(paddle.color + paddle.sprite + Fore.RESET)
+    def move(self, Board):
+        pass
