@@ -18,7 +18,7 @@ class Window:
 
     # create the border for the window
     def makeborder(self):
-        self.Board = [[' ' for j in range(self.width)]
+        self.Board = [[None for j in range(self.width)]
                       for i in range(self.height)]
 
         a = Entity(1, 1, 1, 1, Fore.WHITE, '┃')
@@ -31,30 +31,32 @@ class Window:
         for i in range(self.height):
             for j in range(self.width):
                 if j == 0 or j == self.width - 1:
-                    self.Board[i][j] = '┃'
+                    self.Board[i][j] = a
 
                 if i == 0:
                     if j == 0:
-                        self.Board[i][j] = '┏'
+                        self.Board[i][j] = b
                     elif j == self.width - 1:
-                        self.Board[i][j] = '┓'
+                        self.Board[i][j] = c
                     else:
-                        self.Board[i][j] = '━'
+                        self.Board[i][j] = d
 
                 if i == self.height - 1:
                     if j == 0:
-                        self.Board[i][j] = '┗'
+                        self.Board[i][j] = e
                     elif j == self.width - 1:
-                        self.Board[i][j] = '┛'
+                        self.Board[i][j] = f
                     else:
-                        self.Board[i][j] = '━'
+                        self.Board[i][j] = d
 
     # adding objects to the window
     def add(self, element):
         self.entities.append(element)
 
     def addPaddle(self, element):
-        self.paddle = element
+        self.entities.append(element)
+
+        # self.paddle = element
     # moving ball within the window
 
     # def move(self, element, paddle):
@@ -77,22 +79,19 @@ class Window:
 
             self.makeborder()
 
-            for i in range(self.paddle.width):
-                self.Board[self.paddle.y][self.paddle.x+i] = self.paddle.sprite
+            # for i in range(self.paddle.width):
+            #     self.Board[self.paddle.y][self.paddle.x+i] = self.paddle
 
             # adding elements to the board
             for element in self.entities:
-                self.Board[element.y][element.x] = element.sprite
+                self.Board[element.y][element.x] = element
                 # element.move(self.Board)
 
             for i in range(self.height):
                 for j in range(self.width):
                     if(self.Board[i][j] != None):
-                        # if (self.Board[i][j].width == 1):
-                        pixel = self.Board[i][j]
+                        pixel = self.Board[i][j].sprite
                         print(pixel, sep="", end="")
-
-                        # j = j+self.Board[i][j].width + 1
 
                     else:
                         pixel = ' '

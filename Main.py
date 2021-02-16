@@ -2,7 +2,7 @@ import os
 import sys
 import time
 
-from window import Window
+from window2 import Window
 from objects import Ball, Paddle
 from colorama import init
 from colorama import Fore, Back, Style
@@ -18,10 +18,12 @@ if __name__ == "__main__":
 
     # new game window
     window = Window()
-    Ball_1 = Ball(5, 5, 1, 1, Fore.RED)
-    Ball_2 = Ball(10, 25, -1, 1)
-    paddle_1 = Paddle(1, 5)
-    window.add(Ball_1)
-    window.add(Ball_2)
-    window.addPaddle(paddle_1)
+    ball1 = Ball(10, 10, 1, 1, 1, 1, Fore.RED, "⬤")
+    # print(ball1.color+ball1.sprite+Fore.RESET)
+    paddle = Paddle(10, 40, 1, 15, Fore.GREEN, "▒")
+    # print(paddle.color + paddle.sprite + Fore.RESET)
+
+    window.add(ball1)
+
+    window.addPaddle(paddle)
     window.render()
