@@ -18,6 +18,7 @@ class Window:
         self.width = size.columns
         self.entities = []
         self.paddle = None
+        self.bricks = []
 
     # create the border for the window
     def makeborder(self):
@@ -59,15 +60,29 @@ class Window:
         self.entities.append(element)
 
     def addPaddle(self, element):
-        # self.entities.append(element)
-
         self.paddle = element
+
+    def addBrick(self, element):
+        self.bricks.append(element)
 
     # render the screen
 
     def handle_collisions(self, element):
         self.handle_bordercollision(element)
         self.handle_paddlecollision(element)
+        self.handle_brickcollision(element)
+
+    def handle_brickcollision(self, element):
+        for brick in self.bricks:
+            brick.collide(element)
+
+    def handle_powercollision(self, element):
+        pad_x = self.paddle.x
+        pad_y = self.paddle.y
+        wid_x = self.paddle.width
+
+        if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x):
+            element.vy = 0
 
     def handle_paddlecollision(self, element):
         pad_x = self.paddle.x
@@ -117,20 +132,29 @@ class Window:
 
             self.makeborder()
 
+            # adding bricks
+            for element in self.bricks:
+                for k in range(element.height):
+                    for i in range(element.width):
+                        self.Board[element.y + k][element.x + i] = element
+                        element.move(self.height)
+                        self.handle_powercollision(element)
+
             # checking keyboard responses
+            # self.Make_Paddle()
 
             if Key.kbhit():
                 inp = Key.getch()
                 termios.tcflush(sys.stdin, termios.TCIOFLUSH)
                 if inp == 'a' and self.paddle.x >= 1:
-                    self.paddle.x = self.paddle.x - 1
+                    self.paddle.x = self.paddle.x - 2
 
                 elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-1:
-                    self.paddle.x = self.paddle.x + 1
+                    self.paddle.x = self.paddle.x + 2
                 Key.flush()
             # making paddle
-            self.Make_Paddle()
 
+            self.Make_Paddle()
             # adding elements to the board
             for element in self.entities:
                 self.Board[element.y][element.x] = element
@@ -140,7 +164,8 @@ class Window:
             for i in range(self.height):
                 for j in range(self.width):
                     if(self.Board[i][j] != None):
-                        pixel = self.Board[i][j].sprite
+                        pixel = self.Board[i][j].color + \
+                            self.Board[i][j].sprite + Fore.RESET
                         self.PrintBoard[i][j] = pixel
                         # print(pixel, sep="", end="")
                     else:

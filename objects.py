@@ -35,3 +35,50 @@ class Paddle(Entity):
 
     def move(self, Board):
         pass
+
+
+class Brick(Entity):
+    def __init__(self, x, y, height, width, strength, utility, utility_sprite, vx=0, vy=0, color=Fore.WHITE, sprite="▒"):
+        super().__init__(x, y, height, width, color, sprite)
+        self.utility = utility
+        self.utility_sprite = utility_sprite
+        self.strength = strength
+        self.display()
+        self.vx = 0
+        self.vy = 0
+
+    def display(self):
+        if (self.strength == 3):
+            self.color = Fore.RED
+        if (self.strength == 2):
+            self.color = Fore.BLUE
+        if (self.strength == 1):
+            self.color = Fore.GREEN
+        if (self.strength == 0):
+            self.color = Fore.WHITE
+            self.sprite = self.utility_sprite
+            self.vy = 1
+            self.width = 1
+            self.height = 1
+
+    def move(self, height):
+        if self.y < height - 5:
+            self.y = self.vy + self.y
+        else:
+            self.vy = 0
+            self.sprite = ' '
+
+    def collide(self, ball):
+        new_x = ball.x + ball.vx
+        new_y = ball.y + ball.vy
+
+        if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
+            if(self.strength != 0):
+                self.strength = self.strength - 1
+                self.display()
+            # ball.vx = -ball.vx
+                ball.vy = -ball.vy
+
+
+# brick = Brick(10, 10, 1, 1, 3, 0, 0, "normal", "u", Fore.GREEN, "▒")
+# print(brick.color + brick.sprite + Fore.RESET)
