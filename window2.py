@@ -117,24 +117,25 @@ class Window:
 
             self.makeborder()
 
+            # checking keyboard responses
+
+            if Key.kbhit():
+                inp = Key.getch()
+                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+                if inp == 'a' and self.paddle.x >= 1:
+                    self.paddle.x = self.paddle.x - 1
+
+                elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-1:
+                    self.paddle.x = self.paddle.x + 1
+                Key.flush()
+            # making paddle
+            self.Make_Paddle()
+
             # adding elements to the board
             for element in self.entities:
                 self.Board[element.y][element.x] = element
                 element.move(self.Board)
                 self.handle_collisions(element)
-
-            # checking keyboard responses
-            if Key.kbhit():
-                inp = Key.getch()
-                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-                if inp == 'a' and self.paddle.x >= 1:
-                    self.paddle.x = self.paddle.x - 2
-
-                elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-1:
-                    self.paddle.x = self.paddle.x + 2
-                Key.flush()
-            # making paddle
-            self.Make_Paddle()
 
             for i in range(self.height):
                 for j in range(self.width):
