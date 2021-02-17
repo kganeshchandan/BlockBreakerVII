@@ -18,9 +18,9 @@ if __name__ == "__main__":
 
     # new game window
     window = Window()
-    ball1 = Ball(19, 20, 1, 1, 1, 1, Fore.RED, "⬤")
+    ball1 = Ball(30, 20, 1, 1, 1, 1, Fore.RED, "⬤")
     # print(ball1.color+ball1.sprite+Fore.RESET)
-    paddle = Paddle(40, 40, 1, 16, Fore.GREEN, "=")
+    paddle = Paddle(40, 40, 1, 16, Fore.GREEN, "▒")
     # print(paddle.color + paddle.sprite + Fore.RESET)
 
     window.add(ball1)
