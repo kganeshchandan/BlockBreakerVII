@@ -55,7 +55,15 @@ class Window:
                     else:
                         self.Board[i][j] = d
 
+                elif i == self.height - 4:
+                    if j == 0:
+                        self.Board[i][j] = a
+                    elif j == self.width - 1:
+                        self.Board[i][j] = a
+                    else:
+                        self.Board[i][j] = d
     # adding objects to the window
+
     def add(self, element):
         self.entities.append(element)
 
@@ -68,8 +76,9 @@ class Window:
     # render the screen
 
     def handle_collisions(self, element):
-        self.handle_bordercollision(element)
         self.handle_paddlecollision(element)
+        self.handle_bordercollision(element)
+
         self.handle_brickcollision(element)
 
     def handle_brickcollision(self, element):
@@ -96,16 +105,16 @@ class Window:
         if((new_x >= pad_x and new_x <= pad_x + wid_x) and (new_y == pad_y)):
             if pad_x + gap >= new_x:
                 element.vx = -2
-                element.vy = -1
+                element.vy = -element.vy
             elif pad_x + 2*gap >= new_x:
                 element.vx = -1
-                element.vy = -1
+                element.vy = -element.vy
             elif pad_x + 3*gap >= new_x:
                 element.vx = 1
-                element.vy = -1
+                element.vy = -element.vy
             elif pad_x + 4*gap >= new_x:
                 element.vx = 2
-                element.vy = -1
+                element.vy = -element.vy
 
     def handle_bordercollision(self, element):
         if(element.y+element.vy >= self.height or element.y + element.vy <= 0):
@@ -116,6 +125,20 @@ class Window:
     def Make_Paddle(self):
         for i in range(self.paddle.width):
             self.Board[self.paddle.y][self.paddle.x+i] = self.paddle
+
+    def showlevel(self):
+        self.Board[self.height - 3][2] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
+        self.Board[self.height - 3][3] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
+        self.Board[self.height - 3][4] = Entity(1, 1, 1, 1, Fore.WHITE, "V")
+        self.Board[self.height - 3][5] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
+        self.Board[self.height - 3][6] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
+        self.Board[self.height - 3][7] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
+        self.Board[self.height - 2][2] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
+        self.Board[self.height - 2][3] = Entity(1, 1, 1, 1, Fore.WHITE, "I")
+        self.Board[self.height - 2][4] = Entity(1, 1, 1, 1, Fore.WHITE, "V")
+        self.Board[self.height - 2][5] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
+        self.Board[self.height - 2][6] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
+        self.Board[self.height - 2][7] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
 
     def render(self):
         frame = 0
@@ -131,6 +154,7 @@ class Window:
             os.system("clear")
 
             self.makeborder()
+            self.showlevel()
 
             # adding bricks
             for element in self.bricks:
@@ -141,25 +165,34 @@ class Window:
                         self.handle_powercollision(element)
 
             # checking keyboard responses
-            # self.Make_Paddle()
-
-            if Key.kbhit():
-                inp = Key.getch()
-                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-                if inp == 'a' and self.paddle.x >= 1:
+            inp = Key.kbhit()
+            if inp:
+                # inp = Key.getch()
+                # time.sleep(0.001)
+                if inp == 'a' and self.paddle.x >= 2:
                     self.paddle.x = self.paddle.x - 2
+                    self.Make_Paddle()
+                    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
 
-                elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-1:
+                elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-2:
                     self.paddle.x = self.paddle.x + 2
-                Key.flush()
-            # making paddle
+                    self.Make_Paddle()
+                    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+                else:
+                    self.Make_Paddle()
+                    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+                # inp = None
+            else:
+                self.Make_Paddle()
+                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+                inp = None
 
-            self.Make_Paddle()
             # adding elements to the board
             for element in self.entities:
-                self.Board[element.y][element.x] = element
-                element.move(self.Board)
                 self.handle_collisions(element)
+                element.move(self.Board)
+
+                self.Board[element.y][element.x] = element
 
             for i in range(self.height):
                 for j in range(self.width):

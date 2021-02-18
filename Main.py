@@ -8,7 +8,7 @@ from colorama import init
 from colorama import Fore, Back, Style
 
 init()
-FRAME_RATE = 0.09
+FRAME_RATE = 0.1
 
 
 if __name__ == "__main__":
@@ -18,11 +18,11 @@ if __name__ == "__main__":
 
     # new game window
     window = Window()
-    ball1 = Ball(1, 1, 1, 1, 1, 1, Fore.WHITE, "⬤")
+    ball1 = Ball(70, 30, 1, 1, 1, 1, Fore.WHITE, "⬤")
     # print(ball1.color+ball1.sprite+Fore.RESET)
-    paddle = Paddle(40, 40, 1, 16, Fore.WHITE, "▒")
+    paddle = Paddle(40, 40, 1, 24, Fore.WHITE, "▓")
 
-    brick1 = Brick(10, 10, 1, 12, 3, "normal", "+", 0, 0, Fore.GREEN, "▒")
+    brick1 = Brick(10, 10, 2, 12, 3, "normal", "+", 0, 0, Fore.GREEN, "▒")
     brick2 = Brick(30, 10, 1, 12, 2, "normal", "*", 0, 0, Fore.GREEN, "▒")
     brick3 = Brick(50, 10, 1, 12, 1, "normal", "!", 0, 0, Fore.GREEN, "▒")
     brick4 = Brick(70, 10, 1, 12, 1, "normal", "#", 0, 0, Fore.GREEN, "▒")

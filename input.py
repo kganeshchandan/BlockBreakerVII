@@ -34,7 +34,12 @@ class KeyboardInput():
 
         dr, dw, de = select([sys.stdin], [], [], 0)
         # self.flush()
-        return dr != []
+        # return dr != []
+        if (dr != []):
+            return sys.stdin.read(1)
+        else:
+            self.flush()
+            return False
 
     def flush(self):
         termios.tcflush(sys.stdin, termios.TCIOFLUSH)
