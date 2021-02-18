@@ -92,6 +92,7 @@ class Window:
 
         if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x):
             element.vy = 0
+            element.powerup()
 
     def handle_paddlecollision(self, element):
         pad_x = self.paddle.x
@@ -145,11 +146,6 @@ class Window:
         Key = KeyboardInput()
         while True:
             begin = time.monotonic()
-            # frame += 1
-
-            # if frame > 2500000:
-            #     frame = 0
-            # temp = input("proceed :")
 
             os.system("clear")
 

@@ -33,16 +33,13 @@ class Paddle(Entity):
     def __init__(self, x, y, height, width, color, sprite):
         super().__init__(x, y, height, width, color, sprite)
 
-    def move(self, Board):
-        pass
-
 
 class Brick(Entity):
-    def __init__(self, x, y, height, width, strength, utility, utility_sprite, vx=0, vy=0, color=Fore.WHITE, sprite="▒"):
+    def __init__(self, x, y, height, width, strength, vx=0, vy=0, color=Fore.WHITE, sprite="▒"):
         super().__init__(x, y, height, width, color, sprite)
-        self.utility = utility
-        self.utility_sprite = utility_sprite
+
         self.strength = strength
+        self.sprite = sprite
         self.display()
         self.vx = 0
         self.vy = 0
@@ -56,10 +53,7 @@ class Brick(Entity):
             self.color = Fore.GREEN
         if (self.strength == 0):
             self.color = Fore.WHITE
-            self.sprite = self.utility_sprite
-            self.vy = 1
-            self.width = 1
-            self.height = 1
+            self.sprite = ' '
 
     def move(self, height):
         if self.y < height - 5:
@@ -73,12 +67,47 @@ class Brick(Entity):
         new_y = ball.y + ball.vy
 
         if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
+
             if(self.strength != 0):
+                # if(self.utility != "unbreakable"):
                 self.strength = self.strength - 1
                 self.display()
             # ball.vx = -ball.vx
                 ball.vy = -ball.vy
 
 
-# brick = Brick(10, 10, 1, 1, 3, 0, 0, "normal", "u", Fore.GREEN, "▒")
-# print(brick.color + brick.sprite + Fore.RESET)
+class SpecialBrick(Brick):
+    def __init__(self, x, y, height, width, strength, utility, utility_sprite, vx=0, vy=0, color=Fore.WHITE, sprite="▒"):
+        super().__init__(x, y, height, width, strength,
+                         vx=0, vy=0, color=Fore.WHITE, sprite="▒")
+
+        self.utility = utility
+        self.utility_sprite = utility_sprite
+        self.sprite = sprite
+        self.ifbreak()
+
+    def ifbreak(self):
+        if (self.strength == 0):
+            self.color = Fore.WHITE
+            self.sprite = self.utility_sprite
+            self.vy = 1
+            self.width = 1
+
+    def collide(self, ball):
+        new_x = ball.x + ball.vx
+        new_y = ball.y + ball.vy
+
+        if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
+
+            if(self.strength != 0):
+                if(self.utility != "unbreakable"):
+                    self.strength = self.strength - 1
+                self.display()
+                self.ifbreak()
+            # ball.vx = -ball.vx
+                ball.vy = -ball.vy
+
+    def powerup(self):
+        self.y = self.y - 1
+    # brick = Brick(10, 10, 1, 1, 3, 0, 0, "normal", "u", Fore.GREEN, "▒")
+    # print(brick.color + brick.sprite + Fore.RESET)
