@@ -159,14 +159,24 @@ class Window:
         self.Board[self.height -
                    2][8] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.lives))
 
-        self.Board[self.height - 2][70] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
-        self.Board[self.height - 2][71] = Entity(1, 1, 1, 1, Fore.WHITE, "C")
-        self.Board[self.height - 2][72] = Entity(1, 1, 1, 1, Fore.WHITE, "O")
-        self.Board[self.height - 2][73] = Entity(1, 1, 1, 1, Fore.WHITE, "R")
-        self.Board[self.height - 2][74] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
-        self.Board[self.height - 2][75] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
+        self.Board[self.height - 2][self.width -
+                                    10] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
+        self.Board[self.height - 2][self.width -
+                                    9] = Entity(1, 1, 1, 1, Fore.WHITE, "C")
+        self.Board[self.height - 2][self.width -
+                                    8] = Entity(1, 1, 1, 1, Fore.WHITE, "O")
+        self.Board[self.height - 2][self.width -
+                                    7] = Entity(1, 1, 1, 1, Fore.WHITE, "R")
+        self.Board[self.height - 2][self.width -
+                                    6] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
+        self.Board[self.height - 2][self.width -
+                                    5] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
         self.Board[self.height -
-                   2][78] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.score))
+                   2][self.width-4] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score/100)))
+        self.Board[self.height -
+                   2][self.width-3] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score/10)))
+        self.Board[self.height -
+                   2][self.width-2] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score % 10)))
 
     def movepaddle(self, inp):
         if inp:
@@ -190,6 +200,33 @@ class Window:
             termios.tcflush(sys.stdin, termios.TCIOFLUSH)
             inp = None
 
+    def renderBricks(self):
+        for element in self.bricks:
+            for k in range(element.height):
+                for i in range(element.width):
+                    self.Board[element.y + k][element.x + i] = element
+                    element.move(self.height)
+                    self.handle_powercollision(element)
+
+    def renderBalls(self):
+        for element in self.entities:
+            self.handle_collisions(element)
+            element.move(self.Board)
+            self.Board[element.y][element.x] = element
+
+    def renderBoard(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                if(self.Board[i][j] != None):
+                    pixel = self.Board[i][j].color + \
+                        self.Board[i][j].sprite + Fore.RESET
+                    self.PrintBoard[i][j] = pixel
+                else:
+                    pixel = ' '
+                    self.PrintBoard[i][j] = pixel
+        for i in range(self.height):
+            print(*self.PrintBoard[i], sep="")
+
     def render(self):
         Key = KeyboardInput()
         while True:
@@ -201,36 +238,16 @@ class Window:
             self.showlevel()
 
             # adding bricks
-            for element in self.bricks:
-                for k in range(element.height):
-                    for i in range(element.width):
-                        self.Board[element.y + k][element.x + i] = element
-                        element.move(self.height)
-                        self.handle_powercollision(element)
+            self.renderBricks()
 
             # checking keyboard responses
             inp = Key.kbhit()
             self.movepaddle(inp)
             inp = None
             # adding elements to the board
-            for element in self.entities:
-                self.handle_collisions(element)
-                element.move(self.Board)
+            self.renderBalls()
 
-                self.Board[element.y][element.x] = element
-
-            for i in range(self.height):
-                for j in range(self.width):
-                    if(self.Board[i][j] != None):
-                        pixel = self.Board[i][j].color + \
-                            self.Board[i][j].sprite + Fore.RESET
-                        self.PrintBoard[i][j] = pixel
-                    else:
-                        pixel = ' '
-                        self.PrintBoard[i][j] = pixel
-
-            for i in range(self.height):
-                print(*self.PrintBoard[i], sep="")
+            self.renderBoard()
 
             if(self.entities[0].y > self.paddle.y):
                 self.entities[0].status = "onpaddle"

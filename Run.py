@@ -29,7 +29,7 @@ class Game():
             window.addBrick(brick1)
             window.addBrick(brick10)
 
-        if self.level == 2:
+        if self.level >= 2:
             brick1 = Brick(10, 5, 3, 12, 3, 0, 0, Fore.GREEN, "▒")
             brick2 = Brick(30, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
             brick3 = Brick(50, 15, 3, 12, 1,  0, 0, Fore.GREEN, "▒")
