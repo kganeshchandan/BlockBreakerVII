@@ -184,11 +184,15 @@ class Window:
                 self.entities[0].status = "go"
             if inp == 'a' and self.paddle.x >= 2:
                 self.paddle.x = self.paddle.x - 2
+                if self.entities[0].status == "onpaddle":
+                    self.entities[0].x -= 2
                 self.Make_Paddle()
                 termios.tcflush(sys.stdin, termios.TCIOFLUSH)
 
             elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-2:
                 self.paddle.x = self.paddle.x + 2
+                if self.entities[0].status == "onpaddle":
+                    self.entities[0].x += 2
                 self.Make_Paddle()
                 termios.tcflush(sys.stdin, termios.TCIOFLUSH)
             else:
@@ -211,7 +215,7 @@ class Window:
     def renderBalls(self):
         for element in self.entities:
             self.handle_collisions(element)
-            element.move(self.Board)
+            element.move(self.Board, self.paddle)
             self.Board[element.y][element.x] = element
 
     def renderBoard(self):
@@ -233,8 +237,10 @@ class Window:
             begin = time.monotonic()
 
             os.system("clear")
-
+            # makeborder
             self.makeborder()
+
+            # show level lives and score
             self.showlevel()
 
             # adding bricks
@@ -244,9 +250,11 @@ class Window:
             inp = Key.kbhit()
             self.movepaddle(inp)
             inp = None
-            # adding elements to the board
+
+            # adding Balls to the board
             self.renderBalls()
 
+            # rendering the board
             self.renderBoard()
 
             if(self.entities[0].y > self.paddle.y):
@@ -258,6 +266,6 @@ class Window:
                     return self.level, self.lives, self.score
             if self.checkBricks() == 0:
                 return self.level + 1, self.lives, self.score
+
             while time.monotonic() - begin < FRAME_RATE:
                 pass
-        print("Game over")

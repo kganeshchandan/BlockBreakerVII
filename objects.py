@@ -26,9 +26,10 @@ class Ball(Entity):
         self.status = "onpaddle"
         self.pv = 1
 
-    def move(self, Board):
+    def move(self, Board, paddle):
         if self.status == "onpaddle":
-            if Board[self.y+1][self.x+1] != None and Board[self.y+1][self.x - 1] != None:
+            if self.x + self.vx < paddle.x - 1 + paddle.width and self.x + self.vx - 2 > paddle.x:
+
                 self.x = self.x + self.pv
             else:
                 self.pv = -self.pv
