@@ -12,15 +12,19 @@ FRAME_RATE = 0.07
 
 
 class Window:
-    def __init__(self):
+    def __init__(self, level, lives, score):
         size = os.get_terminal_size()
         self.height = size.lines - 1
         self.width = size.columns
         self.entities = []
         self.paddle = None
         self.bricks = []
-
+        self.level = level
+        self.brick_no = 0
+        self.lives = lives
+        self.score = score
     # create the border for the window
+
     def makeborder(self):
         self.PrintBoard = [[None for j in range(self.width)]
                            for i in range(self.height)]
@@ -64,6 +68,18 @@ class Window:
                         self.Board[i][j] = d
     # adding objects to the window
 
+    def checkBricks(self):
+        self.brick_no = 0
+        for brick in self.bricks:
+            try:
+                if(brick.utility != "unbreakable" and brick.strength > 0):
+                    self.brick_no += 1
+            except:
+                if brick.strength > 0:
+                    self.brick_no += 1
+
+        return self.brick_no
+
     def add(self, element):
         self.entities.append(element)
 
@@ -73,17 +89,14 @@ class Window:
     def addBrick(self, element):
         self.bricks.append(element)
 
-    # render the screen
-
     def handle_collisions(self, element):
         self.handle_paddlecollision(element)
         self.handle_bordercollision(element)
-
         self.handle_brickcollision(element)
 
     def handle_brickcollision(self, element):
         for brick in self.bricks:
-            brick.collide(element)
+            self.score += brick.collide(element)
 
     def handle_powercollision(self, element):
         pad_x = self.paddle.x
@@ -134,15 +147,50 @@ class Window:
         self.Board[self.height - 3][5] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
         self.Board[self.height - 3][6] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
         self.Board[self.height - 3][7] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
+        self.Board[self.height -
+                   3][8] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.level))
+
         self.Board[self.height - 2][2] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
         self.Board[self.height - 2][3] = Entity(1, 1, 1, 1, Fore.WHITE, "I")
         self.Board[self.height - 2][4] = Entity(1, 1, 1, 1, Fore.WHITE, "V")
         self.Board[self.height - 2][5] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
         self.Board[self.height - 2][6] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
         self.Board[self.height - 2][7] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
+        self.Board[self.height -
+                   2][8] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.lives))
+
+        self.Board[self.height - 2][70] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
+        self.Board[self.height - 2][71] = Entity(1, 1, 1, 1, Fore.WHITE, "C")
+        self.Board[self.height - 2][72] = Entity(1, 1, 1, 1, Fore.WHITE, "O")
+        self.Board[self.height - 2][73] = Entity(1, 1, 1, 1, Fore.WHITE, "R")
+        self.Board[self.height - 2][74] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
+        self.Board[self.height - 2][75] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
+        self.Board[self.height -
+                   2][78] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.score))
+
+    def movepaddle(self, inp):
+        if inp:
+            if inp == 'w':
+                self.entities[0].status = "go"
+            if inp == 'a' and self.paddle.x >= 2:
+                self.paddle.x = self.paddle.x - 2
+                self.Make_Paddle()
+                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+
+            elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-2:
+                self.paddle.x = self.paddle.x + 2
+                self.Make_Paddle()
+                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+            else:
+                self.Make_Paddle()
+                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+            # inp = None
+        else:
+            self.Make_Paddle()
+            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+            inp = None
 
     def render(self):
-        frame = 0
         Key = KeyboardInput()
         while True:
             begin = time.monotonic()
@@ -162,27 +210,8 @@ class Window:
 
             # checking keyboard responses
             inp = Key.kbhit()
-            if inp:
-                # inp = Key.getch()
-                # time.sleep(0.001)
-                if inp == 'a' and self.paddle.x >= 2:
-                    self.paddle.x = self.paddle.x - 2
-                    self.Make_Paddle()
-                    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-
-                elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-2:
-                    self.paddle.x = self.paddle.x + 2
-                    self.Make_Paddle()
-                    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-                else:
-                    self.Make_Paddle()
-                    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-                # inp = None
-            else:
-                self.Make_Paddle()
-                termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-                inp = None
-
+            self.movepaddle(inp)
+            inp = None
             # adding elements to the board
             for element in self.entities:
                 self.handle_collisions(element)
@@ -196,15 +225,22 @@ class Window:
                         pixel = self.Board[i][j].color + \
                             self.Board[i][j].sprite + Fore.RESET
                         self.PrintBoard[i][j] = pixel
-                        # print(pixel, sep="", end="")
                     else:
                         pixel = ' '
                         self.PrintBoard[i][j] = pixel
-                        # print(pixel, sep="", end="")
 
-            # Printing on screen
             for i in range(self.height):
                 print(*self.PrintBoard[i], sep="")
 
+            if(self.entities[0].y > self.paddle.y):
+                self.entities[0].status = "onpaddle"
+                self.entities[0].x = self.paddle.x + int(self.paddle.width / 2)
+                self.entities[0].y = self.paddle.y - 1
+                self.lives -= 1
+                if self.lives == 0:
+                    return self.level, self.lives, self.score
+            if self.checkBricks() == 0:
+                return self.level + 1, self.lives, self.score
             while time.monotonic() - begin < FRAME_RATE:
                 pass
+        print("Game over")

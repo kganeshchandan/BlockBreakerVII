@@ -23,10 +23,20 @@ class Ball(Entity):
         super().__init__(x, y, height, width, color, sprite)
         self.vx = vx
         self.vy = vy
+        self.status = "onpaddle"
+        self.pv = 1
 
     def move(self, Board):
-        self.x = self.x+self.vx
-        self.y = self.y + self.vy
+        if self.status == "onpaddle":
+            if Board[self.y+1][self.x+1] != None and Board[self.y+1][self.x - 1] != None:
+                self.x = self.x + self.pv
+            else:
+                self.pv = -self.pv
+                self.x = self.x + self.pv
+
+        else:
+            self.x = self.x+self.vx
+            self.y = self.y + self.vy
 
 
 class Paddle(Entity):
@@ -74,6 +84,11 @@ class Brick(Entity):
                 self.display()
             # ball.vx = -ball.vx
                 ball.vy = -ball.vy
+                return 1
+            else:
+                return 0
+        else:
+            return 0
 
 
 class SpecialBrick(Brick):
@@ -102,10 +117,17 @@ class SpecialBrick(Brick):
             if(self.strength != 0):
                 if(self.utility != "unbreakable"):
                     self.strength = self.strength - 1
+
                 self.display()
                 self.ifbreak()
+
             # ball.vx = -ball.vx
                 ball.vy = -ball.vy
+                return 1
+            else:
+                return 0
+        else:
+            return 0
 
     def powerup(self):
         self.y = self.y - 1
