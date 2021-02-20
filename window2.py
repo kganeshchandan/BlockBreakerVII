@@ -7,6 +7,7 @@ from colorama import init
 from colorama import Fore, Back, Style
 from objects import Entity
 from input import KeyboardInput
+from objects import Power_up
 init()
 FRAME_RATE = 0.07
 
@@ -23,6 +24,7 @@ class Window:
         self.brick_no = 0
         self.lives = lives
         self.score = score
+        self.powerups = []
     # create the border for the window
 
     def makeborder(self):
@@ -98,6 +100,10 @@ class Window:
         for brick in self.bricks:
             self.score += brick.collide(element)
 
+    def checkpowerups(self):
+        for powerup in self.powerups:
+            powerup.deactivate()
+
     def handle_powercollision(self, element):
         pad_x = self.paddle.x
         pad_y = self.paddle.y
@@ -106,13 +112,14 @@ class Window:
         if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x):
             element.vy = 0
             element.powerup()
+            self.powerups.append(
+                Power_up(self.paddle, self.entities, element.utility))
 
     def handle_paddlecollision(self, element):
         pad_x = self.paddle.x
         pad_y = self.paddle.y
         wid_x = self.paddle.width
         gap = wid_x/4
-
         new_x = element.x + element.vx
         new_y = element.y + element.vy
 
@@ -177,6 +184,9 @@ class Window:
                    2][self.width-3] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score/10)))
         self.Board[self.height -
                    2][self.width-2] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score % 10)))
+
+        self.Board[self.height - 3][self.width -
+                                    5] = Entity(1, 1, 1, 1, Fore.WHITE, str(len(self.entities)))
 
     def movepaddle(self, inp):
         if inp:
@@ -243,6 +253,9 @@ class Window:
             # show level lives and score
             self.showlevel()
 
+            # checkpowerups
+            self.checkpowerups()
+
             # adding bricks
             self.renderBricks()
 
@@ -257,13 +270,26 @@ class Window:
             # rendering the board
             self.renderBoard()
 
-            if(self.entities[0].y > self.paddle.y):
-                self.entities[0].status = "onpaddle"
-                self.entities[0].x = self.paddle.x + int(self.paddle.width / 2)
-                self.entities[0].y = self.paddle.y - 1
-                self.lives -= 1
-                if self.lives == 0:
-                    return self.level, self.lives, self.score
+            for ball in self.entities:
+                if len(self.entities) == 1:
+                    if ball.y > self.paddle.y:
+                        ball.status = "onpaddle"
+                        ball.x = self.paddle.x + int(self.paddle.width / 2)
+                        ball.y = self.paddle.y - 1
+                        self.lives -= 1
+                    if self.lives == 0:
+                        return self.level, self.lives, self.score
+                else:
+                    if ball.y > self.paddle.y:
+                        self.entities.remove(ball)
+
+            # if(self.entities[0].y > self.paddle.y):
+            #     self.entities[0].status = "onpaddle"
+            #     self.entities[0].x = self.paddle.x + int(self.paddle.width / 2)
+            #     self.entities[0].y = self.paddle.y - 1
+            #     self.lives -= 1
+            #     if self.lives == 0:
+            #         return self.level, self.lives, self.score
             if self.checkBricks() == 0:
                 return self.level + 1, self.lives, self.score
 

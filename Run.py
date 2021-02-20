@@ -21,11 +21,20 @@ class Game():
 
     def initialize_brickpattern(self, window):
         if self.level == 1:
-            brick1 = Brick(10, 5, 3, 50, 3, 0, 0, Fore.GREEN, "▒")
-            brick9 = SpecialBrick(22, 20, 1, 12, 1, "unbreakable",
-                                  "$", 0, 0, Fore.GREEN, "█")
-            brick10 = SpecialBrick(40, 20, 1, 30, 2, "lmao",
+
+            brick2 = Brick(10, 10, 3, 10, 3,  0, 0, Fore.GREEN, "▒")
+
+            brick10 = SpecialBrick(80, 20, 1, 10, 1, "multiball",
                                    "@", 0, 0, Fore.WHITE, "█")
+            brick3 = Brick(50, 15, 3, 12, 1,  0, 0, Fore.GREEN, "▒")
+            brick4 = Brick(70, 15, 1, 12, 1, 0, 0, Fore.GREEN, "▒")
+            brick5 = Brick(20, 25, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
+            brick1 = SpecialBrick(60, 10, 1, 30, 1, "fireball",
+                                  "*", 0, 0, Fore.WHITE, "█")
+            window.addBrick(brick2)
+            window.addBrick(brick3)
+            window.addBrick(brick4)
+            window.addBrick(brick5)
             window.addBrick(brick1)
             window.addBrick(brick10)
 
