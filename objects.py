@@ -178,6 +178,8 @@ class Power_up():
                                  ball.vx, 1, Fore.RED, "⬤", status="go"))
             for ball in temp:
                 self.balls.append(ball)
+        elif self.utility == "grab":
+            pass
 
     def deactivate(self):
         if self.status:
@@ -201,6 +203,12 @@ class Power_up():
                     for ball in self.balls:
                         ball.strength = 1
                         ball.color = Fore.MAGENTA
+                    self.status = False
+                elif self.utility == "grab":
+                    for ball in self.balls:
+                        ball.status = "go"
+                        ball.color = Fore.MAGENTA
+
                     self.status = False
 
     def validate(self):

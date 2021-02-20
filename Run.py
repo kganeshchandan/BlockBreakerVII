@@ -29,7 +29,7 @@ class Game():
             brick3 = Brick(50, 15, 3, 12, 1,  0, 0, Fore.GREEN, "▒")
             brick4 = Brick(70, 15, 1, 12, 1, 0, 0, Fore.GREEN, "▒")
             brick5 = Brick(20, 25, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick1 = SpecialBrick(60, 10, 1, 30, 1, "fireball",
+            brick1 = SpecialBrick(60, 10, 1, 30, 1, "grab",
                                   "*", 0, 0, Fore.WHITE, "█")
             window.addBrick(brick2)
             window.addBrick(brick3)

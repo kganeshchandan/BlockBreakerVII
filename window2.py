@@ -100,9 +100,27 @@ class Window:
         for brick in self.bricks:
             self.score += brick.collide(element)
 
+    def grab(self):
+        pad_x = self.paddle.x
+        pad_y = self.paddle.y
+        wid_x = self.paddle.width
+        gap = wid_x/4
+
+        for element in self.entities:
+            new_x = element.x + element.vx
+            new_y = element.y + element.vy
+
+            if((new_x >= pad_x and new_x <= pad_x + wid_x) and (new_y == pad_y - 1)):
+                element.status = "onpaddle"
+                element.x = self.paddle.x + int(self.paddle.width / 2)
+                element.y = self.paddle.y - 1
+                element.color = Fore.RED
+
     def checkpowerups(self):
         for powerup in self.powerups:
             powerup.deactivate()
+            if powerup.utility == "grab" and powerup.status == True:
+                self.grab()
 
     def handle_powercollision(self, element):
         pad_x = self.paddle.x
@@ -283,13 +301,6 @@ class Window:
                     if ball.y > self.paddle.y:
                         self.entities.remove(ball)
 
-            # if(self.entities[0].y > self.paddle.y):
-            #     self.entities[0].status = "onpaddle"
-            #     self.entities[0].x = self.paddle.x + int(self.paddle.width / 2)
-            #     self.entities[0].y = self.paddle.y - 1
-            #     self.lives -= 1
-            #     if self.lives == 0:
-            #         return self.level, self.lives, self.score
             if self.checkBricks() == 0:
                 return self.level + 1, self.lives, self.score
 
