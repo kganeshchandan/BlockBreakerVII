@@ -67,13 +67,15 @@ class Brick(Entity):
         if (self.strength == 0):
             self.color = Fore.WHITE
             self.sprite = ' '
+            self.height = 1
+            self.width = 1
 
     def move(self, height):
-        if self.y < height - 5:
+        if self.y + self.height < height - 4:
             self.y = self.vy + self.y
         else:
             self.vy = 0
-            self.sprite = ' '
+            # self.sprite = ' '
 
     # def collide(self, ball):
     #     new_x = ball.x + ball.vx
@@ -114,18 +116,21 @@ class Brick(Entity):
         if self.willtouch(ball):
 
             if(self.strength != 0):
-                if ball.x < self.x or ball.x > self.x + self.width - 1:
-                    ball.vx = -ball.vx
-                else:
-                    ball.vy = -ball.vy
+
                 # if(self.utility != "unbreakable"):
                 if ball.strength == 1:
                     self.strength = self.strength - 1
+                    if ball.x < self.x or ball.x > self.x + self.width - 1:
+                        ball.vx = -ball.vx
+                    else:
+                        ball.vy = -ball.vy
                 else:
                     self.strength = 0
 
-            self.display()
-            return 1
+                self.display()
+                return 1
+            else:
+                return 0
         else:
             return 0
 
@@ -147,35 +152,73 @@ class SpecialBrick(Brick):
             self.vy = config.POWERUP_FALL
             self.x = int(self.x + self.width / 2)
 
+            self.height = config.POWERUP_WIDTH
             self.width = config.POWERUP_WIDTH
+
+    # def collide(self, ball):
+    #     new_x = ball.x + ball.vx
+    #     new_y = ball.y + ball.vy
+
+    #     if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
+
+    #         if(self.strength != 0):
+    #             if ball.strength == 1:
+    #                 if(self.utility != "unbreakable"):
+    #                     self.strength = self.strength - 1
+    #             else:
+    #                 self.strength = 0
+    #                 ball.vy = -ball.vy
+
+    #             self.display()
+    #             self.ifbreak()
+
+    #         # ball.vx = -ball.vx
+    #             ball.vy = -ball.vy
+    #             return 1
+    #         else:
+    #             return 0
+    #     else:
+    #         return 0
+
+    def willtouch(self, ball):
+        new_x = ball.x + ball.vx
+        new_y = ball.y + ball.vy
+        dist = int((new_y - ball.y)/ball.vy)
+
+        if new_x >= self.x and new_x <= self.x + self.width - 1 and new_y >= self.y and new_y <= self.y + self.height - 1:
+            return True
+        else:
+            return False
 
     def collide(self, ball):
         new_x = ball.x + ball.vx
         new_y = ball.y + ball.vy
 
-        if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
+        if self.willtouch(ball):
 
             if(self.strength != 0):
+
+                # if(self.utility != "unbreakable"):
                 if ball.strength == 1:
                     if(self.utility != "unbreakable"):
                         self.strength = self.strength - 1
+                    if ball.x < self.x or ball.x > self.x + self.width - 1:
+                        ball.vx = -ball.vx
+                    else:
+                        ball.vy = -ball.vy
                 else:
                     self.strength = 0
-                    ball.vy = -ball.vy
-
+                # self.width = 1
                 self.display()
                 self.ifbreak()
 
-            # ball.vx = -ball.vx
-                ball.vy = -ball.vy
                 return 1
             else:
                 return 0
         else:
             return 0
-
-    def powerup(self):
-        self.y = self.y - 1
+    # def powerup(self):
+    #     self.y = self.y - 1
     # brick = Brick(10, 10, 1, 1, 3, 0, 0, "normal", "u", Fore.GREEN, "▒")
     # print(brick.color + brick.sprite + Fore.RESET)
 
@@ -212,7 +255,7 @@ class Power_up():
             for ball in self.balls:
                 vx = ball.vx
                 vy = ball.vy
-                newball = Ball(ball.x - ball.vx, ball.y - ball.vy + 1, 1, 1, -
+                newball = Ball(ball.x - ball.vx, ball.y + ball.vy + 1, 1, 1, -
                                ball.vx, 1, ball.color, "⬤", status="go")
                 newball.strength = ball.strength
 

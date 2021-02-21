@@ -25,16 +25,16 @@ class Game():
 
             brick2 = Brick(10, 10, 20, 10, 3,  0, 0, Fore.GREEN, "▒")
 
-            brick10 = SpecialBrick(80, 20, 1, 10, 3, "multiball",
+            brick10 = SpecialBrick(75, 20, 1, 17, 1, "multiball",
                                    "⤧", 0, 0, Fore.WHITE, "█")
-            brick3 = Brick(50, 15, 3, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick4 = Brick(70, 15, 4, 12, 3, 0, 0, Fore.GREEN, "▒")
+            # brick3 = Brick(50, 15, 3, 12, 3,  0, 0, Fore.GREEN, "▒")
+            # brick4 = Brick(70, 15, 4, 12, 3, 0, 0, Fore.GREEN, "▒")
             brick5 = Brick(20, 25, 4, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick1 = SpecialBrick(60, 10, 1, 30, 3, "grab",
+            brick1 = SpecialBrick(60, 10, 10, 10, 2, "fireball",
                                   "⤓", 0, 0, Fore.WHITE, "█")
             window.addBrick(brick2)
-            window.addBrick(brick3)
-            window.addBrick(brick4)
+            # window.addBrick(brick3)
+            # window.addBrick(brick4)
             # window.addBrick(brick5)
             window.addBrick(brick1)
             window.addBrick(brick10)
