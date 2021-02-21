@@ -102,21 +102,7 @@ class Window:
         ex_y = exploding_brick.y
         ex_height = exploding_brick.height
         ex_width = exploding_brick.width
-        e4_x, e4_y = exploding_brick.x + exploding_brick.width, exploding_brick.y
-        # self.score = e4_x
-        # if self.Board[e4_y][e4_x] != None:
-        #     try:
-        #         if self.Board[e4_y][e4_x].utility == "explode":
-        #             self.Board[e4_y][e4_x].strength = 0
-        #             self.Board[e4_y][e4_x].sprite = " "
-        #             self.explosion(self.Board[e4_y][e4_x])
-        #         else:
-        #             self.Board[e4_y][e4_x].strength = 0
-        #             self.Board[e4_y][e4_x].sprite = " "
 
-        #     except:
-        #         self.Board[e4_y][e4_x].strength = 0
-        #         self.Board[e4_y][e4_x].sprite = " "
         for i in range(ex_x - 1, ex_x + ex_width + 1):
             for j in range(ex_y - 1, ex_y + ex_height + 1):
                 if self.Board[j][i] != None:
