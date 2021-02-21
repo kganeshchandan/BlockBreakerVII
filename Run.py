@@ -30,7 +30,7 @@ class Game():
 
             brick3 = Brick(10, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
             bricka = Brick(25, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
-            brickb = Brick(41, 5, 3, 13, 2,  0, 0, Fore.GREEN, "▒")
+            brickb = Brick(40, 5, 3, 15, 2,  0, 0, Fore.GREEN, "▒")
             brick4 = Brick(58, 5, 3, 12, 2, 0, 0, Fore.GREEN, "▒")
             brick5 = Brick(73, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
 
@@ -50,6 +50,8 @@ class Game():
             brickc = SpecialBrick(
                 46, 10, 10, 3, 4, "expandpaddle", "⟷", 0, 0, Fore.WHITE, "█")
 
+            brickz = SpecialBrick(
+                22, 21, 4, 51, 2, "fireball", "↟", 0, 0, Fore.WHITE, "█")
             window.addBrick(brick2)
             window.addBrick(brick7)
             window.addBrick(brick3)
@@ -70,6 +72,7 @@ class Game():
             window.addBrick(brick16)
 
             window.addBrick(brickc)
+            window.addBrick(brickz)
 
         if self.level >= 2:
             brick1 = SpecialBrick(30, 10, 1, 10, 4, "fireball",
