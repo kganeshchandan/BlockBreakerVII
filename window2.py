@@ -8,8 +8,9 @@ from colorama import Fore, Back, Style
 from objects import Entity
 from input import KeyboardInput
 from objects import Power_up
+import config as config
 init()
-FRAME_RATE = 0.07
+FRAME_RATE = config.FRAME_RATE
 
 
 class Window:
@@ -116,9 +117,19 @@ class Window:
                 element.y = self.paddle.y - 1
                 element.color = Fore.RED
 
+    def showpowerups(self, powerup):
+        lst = []
+        for p in self.powerups:
+            if p.status == True:
+                lst.append(Entity(1, 1, 1, 1, Fore.WHITE, p.utility_sprite))
+
+        for i in range(len(lst)):
+            self.Board[self.height - 3][self.width - i - 3] = lst[i]
+
     def checkpowerups(self):
         for powerup in self.powerups:
             powerup.deactivate()
+            self.showpowerups(powerup)
             if powerup.utility == "grab" and powerup.status == True:
                 self.grab()
 
@@ -128,10 +139,10 @@ class Window:
         wid_x = self.paddle.width
 
         if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x):
-            element.vy = 0
-            element.powerup()
+            self.showpowerups(element)
+            element.height = 1
             self.powerups.append(
-                Power_up(self.paddle, self.entities, element.utility))
+                Power_up(self.paddle, self.entities, element.utility, element.utility_sprite))
 
     def handle_paddlecollision(self, element):
         pad_x = self.paddle.x
@@ -143,16 +154,16 @@ class Window:
 
         if((new_x >= pad_x and new_x <= pad_x + wid_x) and (new_y == pad_y)):
             if pad_x + gap >= new_x:
-                element.vx = -2
+                element.vx = -2*(config.BALL_VX)
                 element.vy = -element.vy
             elif pad_x + 2*gap >= new_x:
-                element.vx = -1
+                element.vx = -1*(config.BALL_VX)
                 element.vy = -element.vy
             elif pad_x + 3*gap >= new_x:
-                element.vx = 1
+                element.vx = 1*(config.BALL_VX)
                 element.vy = -element.vy
             elif pad_x + 4*gap >= new_x:
-                element.vx = 2
+                element.vx = 2*(config.BALL_VX)
                 element.vy = -element.vy
 
     def handle_bordercollision(self, element):
@@ -203,24 +214,26 @@ class Window:
         self.Board[self.height -
                    2][self.width-2] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score % 10)))
 
-        self.Board[self.height - 3][self.width -
-                                    5] = Entity(1, 1, 1, 1, Fore.WHITE, str(len(self.entities)))
-
     def movepaddle(self, inp):
         if inp:
             if inp == 'w':
-                self.entities[0].status = "go"
-            if inp == 'a' and self.paddle.x >= 2:
-                self.paddle.x = self.paddle.x - 2
-                if self.entities[0].status == "onpaddle":
-                    self.entities[0].x -= 2
+                for ball in self.entities:
+                    ball.status = "go"
+
+            if inp == 'a' and self.paddle.x >= config.PADDLE_V:
+                self.paddle.x = self.paddle.x - config.PADDLE_V
+
+                for ball in self.entities:
+                    if ball.status == "onpaddle":
+                        ball.x -= config.PADDLE_V
                 self.Make_Paddle()
                 termios.tcflush(sys.stdin, termios.TCIOFLUSH)
 
-            elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-2:
-                self.paddle.x = self.paddle.x + 2
-                if self.entities[0].status == "onpaddle":
-                    self.entities[0].x += 2
+            elif inp == 'd' and self.paddle.x <= self.width - self.paddle.width-config.PADDLE_V:
+                self.paddle.x = self.paddle.x + config.PADDLE_V
+                for ball in self.entities:
+                    if ball.status == "onpaddle":
+                        ball.x += config.PADDLE_V
                 self.Make_Paddle()
                 termios.tcflush(sys.stdin, termios.TCIOFLUSH)
             else:
