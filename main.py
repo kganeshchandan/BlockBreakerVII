@@ -21,7 +21,7 @@ class Game():
         pass
 
     def initialize_brickpattern(self, window):
-        if self.level == 1:
+        if self.level == 1 or self.level == 3:
 
             brick2 = SpecialBrick(
                 10, 10, 20, 10, 3, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
@@ -57,7 +57,7 @@ class Game():
                 22, 27, 3, 5, 1, "explode", "@", 0, 0, Fore.WHITE, "#")
 
             brickx2 = SpecialBrick(
-                27, 27, 3, 2, 1, "explode", "@", 0, 0, Fore.WHITE, "$")
+                27, 30, 3, 3, 1, "explode", "@", 0, 0, Fore.WHITE, "$")
             brickx3 = SpecialBrick(
                 29, 27, 3, 4, 1, "explode", "@", 0, 0, Fore.WHITE, "@")
             brickx4 = SpecialBrick(
@@ -113,31 +113,47 @@ class Game():
             window.addBrick(brickx6)
 
         if self.level >= 2:
-            brick1 = SpecialBrick(30, 10, 1, 10, 4, "fireball",
-                                  "↟", 0, 0, Fore.WHITE, "█")
-            brick7 = Brick(10, 15, 3, 12, 3, 0, 0, Fore.GREEN, "▒")
-            brick2 = Brick(30, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
-            brick3 = Brick(50, 25, 3, 12, 1,  0, 0, Fore.GREEN, "▒")
-            # brick4 = Brick(70, 15, 1, 12, 8, 0, 0, Fore.GREEN, "▒")
-            brick5 = Brick(20, 3, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick6 = Brick(45, 7, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick8 = SpecialBrick(
-                80, 10, 1, 12, 1, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
-            brick9 = SpecialBrick(22, 22, 1, 12, 1, "expandpaddle",
-                                  "⟷", 0, 0, Fore.GREEN, "█")
-            brick10 = SpecialBrick(40, 20, 1, 12, 2, "multiball",
-                                   "⤧", 0, 0, Fore.WHITE, "█")
+            brick2 = SpecialBrick(
+                12, 10, 20, 10, 3, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
+            brick7 = SpecialBrick(
+                75, 10, 20, 10, 3, "fireball", "↟", 0, 0, Fore.WHITE, "█")
+            brickx1 = SpecialBrick(
+                22, 27, 3, 5, 1, "explode", "@", 0, 0, Fore.WHITE, "#")
 
-            window.addBrick(brick1)
+            brickx2 = SpecialBrick(
+                27, 24, 3, 10, 1, "explode", "@", 0, 0, Fore.WHITE, "$")
+            brickx3 = SpecialBrick(
+                37, 21, 3, 10, 1, "explode", "@", 0, 0, Fore.WHITE, "@")
+            brickx4 = SpecialBrick(
+                47, 24, 3, 5, 1, "explode", "@", 0, 0, Fore.WHITE, "&")
+            brickx5 = SpecialBrick(
+                52, 27, 3, 15, 1, "explode", "@", 0, 0, Fore.WHITE, "k")
+            brickx6 = SpecialBrick(
+                67, 27, 3, 5, 1, "explode", "@", 0, 0, Fore.WHITE, "0")
+
+            brickex = Brick(42, 27, 3, 10, 2)
+            brickex1 = Brick(22, 24, 3, 5, 2)
+            brickex2 = Brick(27, 27, 3, 10, 3)
+            brickex3 = Brick(37, 24, 6, 10, 2)
+            brickex4 = Brick(32, 30, 3, 5, 2)
+            brickex5 = Brick(37, 30, 3, 2, 4)
+            brickex6 = Brick(39, 30, 3, 5, 3)
+
+            window.addBrick(brickx1)
+            window.addBrick(brickx2)
+            window.addBrick(brickx3)
+            window.addBrick(brickx4)
+            window.addBrick(brickx5)
+            window.addBrick(brickx6)
             window.addBrick(brick2)
-            window.addBrick(brick3)
-            # window.addBrick(brick4)
-            window.addBrick(brick5)
-            window.addBrick(brick6)
             window.addBrick(brick7)
-            window.addBrick(brick8)
-            window.addBrick(brick9)
-            window.addBrick(brick10)
+            # window.addBrick(brickex)
+            window.addBrick(brickex1)
+            window.addBrick(brickex2)
+            window.addBrick(brickex3)
+            # window.addBrick(brickex4)
+            # window.addBrick(brickex5)
+            # window.addBrick(brickex6)
 
     def initialize_game(self):
         while True:
