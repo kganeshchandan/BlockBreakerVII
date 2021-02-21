@@ -35,7 +35,7 @@ class Ball(Entity):
                 self.x = self.x + self.pv
             else:
                 self.pv = -self.pv
-                self.x = self.x + self.pv
+                self.x = self.x - self.pv
 
         else:
             self.x = self.x+self.vx
@@ -145,8 +145,19 @@ class SpecialBrick(Brick):
         self.sprite = sprite
         self.ifbreak()
 
-    def ifbreak(self):
+    def display(self):
+        if (self.strength == 3):
+            self.color = Fore.RED
+        if (self.strength == 2):
+            self.color = Fore.BLUE
+        if (self.strength == 1):
+            self.color = Fore.GREEN
         if (self.strength == 0):
+            self.color = Fore.WHITE
+            self.sprite = ' '
+
+    def ifbreak(self):
+        if (self.strength == 0 and self.utility != "explode"):
             self.color = Fore.WHITE
             self.sprite = self.utility_sprite
             self.vy = config.POWERUP_FALL
@@ -154,31 +165,6 @@ class SpecialBrick(Brick):
 
             self.height = config.POWERUP_WIDTH
             self.width = config.POWERUP_WIDTH
-
-    # def collide(self, ball):
-    #     new_x = ball.x + ball.vx
-    #     new_y = ball.y + ball.vy
-
-    #     if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
-
-    #         if(self.strength != 0):
-    #             if ball.strength == 1:
-    #                 if(self.utility != "unbreakable"):
-    #                     self.strength = self.strength - 1
-    #             else:
-    #                 self.strength = 0
-    #                 ball.vy = -ball.vy
-
-    #             self.display()
-    #             self.ifbreak()
-
-    #         # ball.vx = -ball.vx
-    #             ball.vy = -ball.vy
-    #             return 1
-    #         else:
-    #             return 0
-    #     else:
-    #         return 0
 
     def willtouch(self, ball):
         new_x = ball.x + ball.vx

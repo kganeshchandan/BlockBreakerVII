@@ -40,8 +40,8 @@ class Game():
                                   "⤓", 0, 0, Fore.WHITE, "█")
             brick11 = SpecialBrick(51, 10, 4, 10, 2, "multiball",
                                    "⤧", 0, 0, Fore.WHITE, "█")
-            brick12 = SpecialBrick(63, 10, 4, 10, 1, "fireball",
-                                   "↟", 0, 0, Fore.WHITE, "█")
+            brick12 = SpecialBrick(63, 10, 4, 10, 1, "multiball",
+                                   "⤧", 0, 0, Fore.WHITE, "█")
             brick13 = Brick(22, 16, 4, 10, 3,  0, 0, Fore.GREEN, "▒")
             brick14 = Brick(34, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
             brick15 = Brick(51, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
@@ -52,6 +52,37 @@ class Game():
 
             brickz = SpecialBrick(
                 22, 21, 4, 51, 2, "fireball", "↟", 0, 0, Fore.WHITE, "█")
+
+            brickx1 = SpecialBrick(
+                22, 27, 3, 5, 1, "explode", "@", 0, 0, Fore.WHITE, "#")
+
+            brickx2 = SpecialBrick(
+                27, 27, 3, 2, 1, "explode", "@", 0, 0, Fore.WHITE, "$")
+            brickx3 = SpecialBrick(
+                29, 27, 3, 4, 1, "explode", "@", 0, 0, Fore.WHITE, "@")
+            brickx4 = SpecialBrick(
+                33, 27, 3, 2, 1, "explode", "@", 0, 0, Fore.WHITE, "&")
+            brickx5 = SpecialBrick(
+                35, 27, 3, 4, 1, "explode", "@", 0, 0, Fore.WHITE, "k")
+            brickx6 = SpecialBrick(
+                39, 27, 3, 3, 1, "explode", "@", 0, 0, Fore.WHITE, "*")
+
+            brickex = Brick(42, 27, 3, 10, 2)
+            brickex1 = Brick(22, 30, 3, 2, 2)
+            brickex2 = Brick(24, 30, 3, 3, 3)
+            brickex3 = Brick(30, 30, 3, 2, 1)
+            brickex4 = Brick(32, 30, 3, 5, 2)
+            brickex5 = Brick(37, 30, 3, 2, 4)
+            brickex6 = Brick(39, 30, 3, 5, 3)
+
+            window.addBrick(brickex)
+            window.addBrick(brickex1)
+            window.addBrick(brickex2)
+            window.addBrick(brickex3)
+            window.addBrick(brickex4)
+            window.addBrick(brickex5)
+            window.addBrick(brickex6)
+
             window.addBrick(brick2)
             window.addBrick(brick7)
             window.addBrick(brick3)
@@ -73,6 +104,13 @@ class Game():
 
             window.addBrick(brickc)
             window.addBrick(brickz)
+            window.addBrick(brickx1)
+            window.addBrick(brickx2)
+            window.addBrick(brickx3)
+
+            window.addBrick(brickx4)
+            window.addBrick(brickx5)
+            window.addBrick(brickx6)
 
         if self.level >= 2:
             brick1 = SpecialBrick(30, 10, 1, 10, 4, "fireball",

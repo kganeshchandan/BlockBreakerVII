@@ -97,9 +97,52 @@ class Window:
         self.handle_bordercollision(element)
         self.handle_brickcollision(element)
 
+    def explosion(self, exploding_brick):
+        ex_x = exploding_brick.x
+        ex_y = exploding_brick.y
+        ex_height = exploding_brick.height
+        ex_width = exploding_brick.width
+        e4_x, e4_y = exploding_brick.x + exploding_brick.width, exploding_brick.y
+        # self.score = e4_x
+        # if self.Board[e4_y][e4_x] != None:
+        #     try:
+        #         if self.Board[e4_y][e4_x].utility == "explode":
+        #             self.Board[e4_y][e4_x].strength = 0
+        #             self.Board[e4_y][e4_x].sprite = " "
+        #             self.explosion(self.Board[e4_y][e4_x])
+        #         else:
+        #             self.Board[e4_y][e4_x].strength = 0
+        #             self.Board[e4_y][e4_x].sprite = " "
+
+        #     except:
+        #         self.Board[e4_y][e4_x].strength = 0
+        #         self.Board[e4_y][e4_x].sprite = " "
+        for i in range(ex_x - 1, ex_x + ex_width + 1):
+            for j in range(ex_y - 1, ex_y + ex_height + 1):
+                if self.Board[j][i] != None:
+                    try:
+                        if self.Board[j][i].utility == "explode" and self.Board[j][i].strength != 0:
+                            self.Board[j][i].strength = 0
+                            self.Board[j][i].sprite = " "
+                            self.explosion(self.Board[j][i])
+                        else:
+                            self.Board[j][i].strength = 0
+                            self.Board[j][i].sprite = " "
+
+                    except:
+                        self.Board[j][i].strength = 0
+                        self.Board[j][i].sprite = " "
+
     def handle_brickcollision(self, element):
         for brick in self.bricks:
-            self.score += brick.collide(element)
+            new = brick.collide(element)
+            self.score += new
+            if new == 1:
+                try:
+                    if brick.utility == "explode":
+                        self.explosion(brick)
+                except:
+                    pass
 
     def grab(self):
         pad_x = self.paddle.x
@@ -140,7 +183,7 @@ class Window:
 
         if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x):
             self.showpowerups(element)
-            element.height = 1
+            # element.height = 1
             self.powerups.append(
                 Power_up(self.paddle, self.entities, element.utility, element.utility_sprite))
 
@@ -218,7 +261,28 @@ class Window:
         if inp:
             if inp == 'w':
                 for ball in self.entities:
+                    element = ball
                     ball.status = "go"
+                    pad_x = self.paddle.x
+                    pad_y = self.paddle.y
+                    wid_x = self.paddle.width
+                    gap = wid_x/4
+                    new_x = element.x
+                    new_y = element.y
+
+                if((new_x >= pad_x and new_x <= pad_x + wid_x)):
+                    if pad_x + gap >= new_x:
+                        element.vx = -2*(config.BALL_VX)
+                        element.vy = -element.vy
+                    elif pad_x + 2*gap >= new_x:
+                        element.vx = -1*(config.BALL_VX)
+                        element.vy = -element.vy
+                    elif pad_x + 3*gap >= new_x:
+                        element.vx = 1*(config.BALL_VX)
+                        element.vy = -element.vy
+                    elif pad_x + 4*gap >= new_x:
+                        element.vx = 2*(config.BALL_VX)
+                        element.vy = -element.vy
 
             if inp == 'a' and self.paddle.x >= config.PADDLE_V:
                 self.paddle.x = self.paddle.x - config.PADDLE_V
