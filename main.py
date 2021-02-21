@@ -38,8 +38,8 @@ class Game():
                                    "⤧", 0, 0, Fore.WHITE, "█")
             brick1 = SpecialBrick(34, 10, 4, 10, 2, "grab",
                                   "⤓", 0, 0, Fore.WHITE, "█")
-            brick11 = SpecialBrick(51, 10, 4, 10, 2, "multiball",
-                                   "⤧", 0, 0, Fore.WHITE, "█")
+            brick11 = SpecialBrick(51, 10, 4, 10, 2, "unbreakable",
+                                   " ", 0, 0, Fore.WHITE, "8")
             brick12 = SpecialBrick(63, 10, 4, 10, 1, "multiball",
                                    "⤧", 0, 0, Fore.WHITE, "█")
             brick13 = Brick(22, 16, 4, 10, 3,  0, 0, Fore.GREEN, "▒")
