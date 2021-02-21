@@ -23,34 +23,66 @@ class Game():
     def initialize_brickpattern(self, window):
         if self.level == 1:
 
-            brick2 = Brick(10, 10, 20, 10, 3,  0, 0, Fore.GREEN, "▒")
+            brick2 = SpecialBrick(
+                10, 10, 20, 10, 3, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
+            brick7 = SpecialBrick(
+                75, 10, 20, 10, 3, "fireball", "↟", 0, 0, Fore.WHITE, "█")
 
-            brick10 = SpecialBrick(75, 20, 1, 17, 1, "multiball",
+            brick3 = Brick(10, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+            bricka = Brick(25, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+            brickb = Brick(41, 5, 3, 13, 2,  0, 0, Fore.GREEN, "▒")
+            brick4 = Brick(58, 5, 3, 12, 2, 0, 0, Fore.GREEN, "▒")
+            brick5 = Brick(73, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+
+            brick10 = SpecialBrick(22, 10, 4, 10, 1, "multiball",
                                    "⤧", 0, 0, Fore.WHITE, "█")
-            # brick3 = Brick(50, 15, 3, 12, 3,  0, 0, Fore.GREEN, "▒")
-            # brick4 = Brick(70, 15, 4, 12, 3, 0, 0, Fore.GREEN, "▒")
-            brick5 = Brick(20, 25, 4, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick1 = SpecialBrick(60, 10, 10, 10, 2, "fireball",
+            brick1 = SpecialBrick(34, 10, 4, 10, 2, "grab",
                                   "⤓", 0, 0, Fore.WHITE, "█")
+            brick11 = SpecialBrick(51, 10, 4, 10, 2, "multiball",
+                                   "⤧", 0, 0, Fore.WHITE, "█")
+            brick12 = SpecialBrick(63, 10, 4, 10, 1, "fireball",
+                                   "↟", 0, 0, Fore.WHITE, "█")
+            brick13 = Brick(22, 16, 4, 10, 3,  0, 0, Fore.GREEN, "▒")
+            brick14 = Brick(34, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
+            brick15 = Brick(51, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
+            brick16 = Brick(63, 16, 4, 10, 3, 0, 0, Fore.GREEN, "▒")
+
+            brickc = SpecialBrick(
+                46, 10, 10, 3, 4, "expandpaddle", "⟷", 0, 0, Fore.WHITE, "█")
+
             window.addBrick(brick2)
-            # window.addBrick(brick3)
-            # window.addBrick(brick4)
-            # window.addBrick(brick5)
+            window.addBrick(brick7)
+            window.addBrick(brick3)
+            window.addBrick(brick4)
+            window.addBrick(brick5)
+            window.addBrick(bricka)
+            window.addBrick(brickb)
+
             window.addBrick(brick1)
             window.addBrick(brick10)
+            window.addBrick(brick11)
+            window.addBrick(brick12)
+            window.addBrick(brick14)
+            window.addBrick(brick15)
+
+            window.addBrick(brick13)
+
+            window.addBrick(brick16)
+
+            window.addBrick(brickc)
 
         if self.level >= 2:
-            brick1 = SpecialBrick(60, 10, 1, 30, 1, "fireball",
+            brick1 = SpecialBrick(30, 10, 1, 10, 4, "fireball",
                                   "↟", 0, 0, Fore.WHITE, "█")
-            brick7 = Brick(10, 5, 3, 12, 3, 0, 0, Fore.GREEN, "▒")
+            brick7 = Brick(10, 15, 3, 12, 3, 0, 0, Fore.GREEN, "▒")
             brick2 = Brick(30, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
-            brick3 = Brick(50, 15, 3, 12, 1,  0, 0, Fore.GREEN, "▒")
-            brick4 = Brick(70, 15, 1, 12, 1, 0, 0, Fore.GREEN, "▒")
-            brick5 = Brick(20, 10, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
-            brick6 = Brick(40, 10, 1, 12, 2,  0, 0, Fore.GREEN, "▒")
+            brick3 = Brick(50, 25, 3, 12, 1,  0, 0, Fore.GREEN, "▒")
+            # brick4 = Brick(70, 15, 1, 12, 8, 0, 0, Fore.GREEN, "▒")
+            brick5 = Brick(20, 3, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
+            brick6 = Brick(45, 7, 1, 12, 3,  0, 0, Fore.GREEN, "▒")
             brick8 = SpecialBrick(
                 80, 10, 1, 12, 1, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
-            brick9 = SpecialBrick(22, 20, 1, 12, 1, "expandpaddle",
+            brick9 = SpecialBrick(22, 22, 1, 12, 1, "expandpaddle",
                                   "⟷", 0, 0, Fore.GREEN, "█")
             brick10 = SpecialBrick(40, 20, 1, 12, 2, "multiball",
                                    "⤧", 0, 0, Fore.WHITE, "█")
@@ -58,7 +90,7 @@ class Game():
             window.addBrick(brick1)
             window.addBrick(brick2)
             window.addBrick(brick3)
-            window.addBrick(brick4)
+            # window.addBrick(brick4)
             window.addBrick(brick5)
             window.addBrick(brick6)
             window.addBrick(brick7)
