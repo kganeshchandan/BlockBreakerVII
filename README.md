@@ -1,5 +1,6 @@
 # BlockBreakerVII
-## this is a game completely made by using OOPs principles in python
+## This is a game completely made by using OOPs principles in python inspired from Break Out
+
 To start the game do
 
 $ python3 main.py
