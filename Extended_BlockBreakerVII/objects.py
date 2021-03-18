@@ -67,15 +67,16 @@ class Brick(Entity):
         if (self.strength == 0):
             self.color = Fore.WHITE
             self.sprite = ' '
-            self.height = 1
-            self.width = 1
+            # self.height = 1
+            # self.width = 1
+            del self
 
     def move(self, height):
         if self.y + self.height < height - 4:
             self.y = self.vy + self.y
         else:
             self.vy = 0
-            # self.sprite = ' '
+            self.sprite = ' '
 
     # def collide(self, ball):
     #     new_x = ball.x + ball.vx
@@ -152,9 +153,10 @@ class SpecialBrick(Brick):
             self.color = Fore.BLUE
         if (self.strength == 1):
             self.color = Fore.GREEN
-        if (self.strength == 0):
-            self.color = Fore.WHITE
-            self.sprite = ' '
+        # if (self.strength == 0):
+        #     self.color = Fore.WHITE
+        #     self.sprite = ' '
+        #     del self
 
     def ifbreak(self):
         if (self.strength == 0 and self.utility != "explode"):

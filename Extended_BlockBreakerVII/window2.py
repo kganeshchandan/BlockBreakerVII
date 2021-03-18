@@ -9,6 +9,8 @@ from objects import Entity
 from input import KeyboardInput
 from objects import Power_up
 import config as config
+from time import monotonic as clock, sleep
+
 init()
 FRAME_RATE = config.FRAME_RATE
 
@@ -146,6 +148,8 @@ class Window:
                 element.y = self.paddle.y - 1
                 element.color = Fore.RED
 
+    # displaythe actibe powerups at the lower part of the board
+
     def showpowerups(self, powerup):
         lst = []
         for p in self.powerups:
@@ -194,6 +198,9 @@ class Window:
             elif pad_x + 4*gap >= new_x:
                 element.vx = 2*(config.BALL_VX)
                 element.vy = -element.vy
+            return True
+        else:
+            return False
 
     def handle_bordercollision(self, element):
         if(element.y+element.vy >= self.height or element.y + element.vy <= 0):
@@ -297,11 +304,31 @@ class Window:
 
     def renderBricks(self):
         for element in self.bricks:
-            for k in range(element.height):
-                for i in range(element.width):
-                    self.Board[element.y + k][element.x + i] = element
-                    element.move(self.height)
-                    self.handle_powercollision(element)
+            try:
+                if element.utility:
+                    for k in range(element.height):
+                        for i in range(element.width):
+                            self.Board[element.y + k][element.x + i] = element
+                            element.move(self.height)
+                            self.handle_powercollision(element)
+                else:
+                    pass
+            except:
+                if element.strength > 0:
+                    for k in range(element.height):
+                        for i in range(element.width):
+                            self.Board[element.y + k][element.x + i] = element
+                            # element.move(self.height)
+                            # self.handle_powercollision(element)
+
+    def brickfall(self):
+        for element in self.bricks:
+            if element.strength > 0:
+                element.y += 1
+                if element.y + element.height == self.paddle.y:
+                    self.lives = 0
+            else:
+                del element
 
     def renderBalls(self):
         for element in self.entities:
@@ -324,9 +351,15 @@ class Window:
 
     def render(self):
         Key = KeyboardInput()
+        BEGIN_TIME = clock()
         while True:
             begin = time.monotonic()
 
+            if clock() > BEGIN_TIME+config.BRICK_FALL_TIME:
+                for ball in self.entities:
+                    if(self.handle_paddlecollision(ball)):
+                        self.brickfall()
+                        BEGIN_TIME = clock()
             os.system("clear")
             # makeborder
             self.makeborder()

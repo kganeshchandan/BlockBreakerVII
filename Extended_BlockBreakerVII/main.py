@@ -23,7 +23,7 @@ class Game():
         pass
 
     def initialize_brickpattern(self, window):
-        if self.level == 1 or self.level == 3:
+        if self.level == 1 or self.level > 2:
 
             brick2 = SpecialBrick(
                 10, 10, 20, 10, 3, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
@@ -114,7 +114,7 @@ class Game():
             window.addBrick(brickx5)
             window.addBrick(brickx6)
 
-        if self.level >= 2:
+        if self.level == 2:
             brick2 = SpecialBrick(
                 12, 10, 20, 10, 3, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
             brick7 = SpecialBrick(

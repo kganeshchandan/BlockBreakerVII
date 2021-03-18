@@ -9,7 +9,7 @@ from colorama import Fore, Back, Style
 LIVES = 6
 
 # window constants
-FRAME_RATE = 0.07
+FRAME_RATE = 0.1
 
 # ball constants
 BALL_VX = 1
@@ -37,3 +37,4 @@ POWERUP_SHRINK_PADDLE = 4
 BRICK_SPRITE = "▒"
 BRICK_WIDTH = 10
 BRICK_HEIGHT = 1
+BRICK_FALL_TIME = 4
