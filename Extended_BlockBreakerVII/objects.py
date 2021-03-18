@@ -19,6 +19,21 @@ class Entity:
         self.width = width
 
 
+class Bullet(Entity):
+    def __init__(self, x, y, height, width, vx=0, vy=-1, color=Fore.WHITE, spite="#"):
+        super().__init__(x, y, height, width)
+        self.vx = 0
+        self.vy = -1
+        self.sprite = "#"
+
+    def move(self):
+        if self.y + self.vy > 3:
+            self.y += self.vy
+        else:
+            self.y = 2
+            self.sprite = ' '
+
+
 class Ball(Entity):
     def __init__(self, x, y, height, width, vx=1, vy=1, color=Fore.WHITE, sprite="⬤", status="onpaddle"):
         super().__init__(x, y, height, width, color, sprite)
@@ -78,28 +93,7 @@ class Brick(Entity):
             self.vy = 0
             self.sprite = ' '
         self.x += self.vx
-    # def collide(self, ball):
-    #     new_x = ball.x + ball.vx
-    #     new_y = ball.y + ball.vy
 
-    #     if ((self.x <= new_x and self.x+self.width >= new_x) and (self.y <= new_y and self.y+self.height >= new_y)):
-
-    #         if(self.strength != 0):
-    #             # if(self.utility != "unbreakable"):
-    #             if ball.strength == 1:
-    #                 self.strength = self.strength - 1
-    #             else:
-    #                 self.strength = 0
-    #                 ball.vy = -ball.vy
-
-    #             self.display()
-    #         # ball.vx = -ball.vx
-    #             ball.vy = -ball.vy
-    #             return 1
-    #         else:
-    #             return 0
-    #     else:
-    #         return 0
     def willtouch(self, ball):
         new_x = ball.x + ball.vx
         new_y = ball.y + ball.vy
@@ -136,6 +130,12 @@ class Brick(Entity):
             return 0
 
 
+# class Bullet(Brick):
+#     def __init__(self, x, y, height, width, strength, vx=0, vy=1, color=Fore.WHITE, sprite="#"):
+#         super().__init__(x, y, height, width, strength)
+#         self.vy = 1
+
+
 class SpecialBrick(Brick):
     def __init__(self, x, y, height, width, strength, utility, utility_sprite, vx=0, vy=0, color=Fore.WHITE, sprite="▒"):
         super().__init__(x, y, height, width, strength,
@@ -153,10 +153,10 @@ class SpecialBrick(Brick):
             self.color = Fore.BLUE
         if (self.strength == 1):
             self.color = Fore.GREEN
-        # if (self.strength == 0):
-        #     self.color = Fore.WHITE
-        #     self.sprite = ' '
-        #     del self
+        if (self.strength == 0):
+            self.color = Fore.WHITE
+            self.sprite = ' '
+            del self
 
     def ifbreak(self, ball_x_velocity, ball_y_velocity):
         if (self.strength == 0 and self.utility != "explode"):
@@ -255,6 +255,9 @@ class Power_up():
         elif self.utility == "grab":
             for ball in self.balls:
                 ball.color = Fore.RED
+        elif self.utility == "shooting":
+            self.paddle.color = Fore.RED
+            self.paddle.sprite = "█"
 
     def deactivate(self):
         if self.status:
@@ -287,6 +290,10 @@ class Power_up():
                         ball.status = "go"
                         ball.color = Fore.MAGENTA
 
+                    self.status = False
+                elif self.utility == "shooting":
+                    self.paddle.color = Fore.WHITE
+                    self.paddle.sprite = config.BRICK_SPRITE
                     self.status = False
 
     def validate(self):

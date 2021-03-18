@@ -7,7 +7,7 @@ from colorama import init
 from colorama import Fore, Back, Style
 from objects import Entity
 from input import KeyboardInput
-from objects import Power_up
+from objects import Power_up, Bullet
 import config as config
 from time import monotonic as clock, sleep
 
@@ -28,6 +28,7 @@ class Window:
         self.lives = lives
         self.score = score
         self.powerups = []
+        self.bullets = []
     # create the border for the window
 
     def makeborder(self):
@@ -254,28 +255,29 @@ class Window:
         if inp:
             if inp == 'w':
                 for ball in self.entities:
-                    element = ball
-                    ball.status = "go"
-                    pad_x = self.paddle.x
-                    pad_y = self.paddle.y
-                    wid_x = self.paddle.width
-                    gap = wid_x/4
-                    new_x = element.x
-                    new_y = element.y
+                    if ball.status == "onpaddle":
+                        element = ball
+                        ball.status = "go"
+                        pad_x = self.paddle.x
+                        pad_y = self.paddle.y
+                        wid_x = self.paddle.width
+                        gap = wid_x/4
+                        new_x = element.x
+                        new_y = element.y
 
-                if((new_x >= pad_x and new_x <= pad_x + wid_x)):
-                    if pad_x + gap >= new_x:
-                        element.vx = -2*(config.BALL_VX)
-                        element.vy = -element.vy
-                    elif pad_x + 2*gap >= new_x:
-                        element.vx = -1*(config.BALL_VX)
-                        element.vy = -element.vy
-                    elif pad_x + 3*gap >= new_x:
-                        element.vx = 1*(config.BALL_VX)
-                        element.vy = -element.vy
-                    elif pad_x + 4*gap >= new_x:
-                        element.vx = 2*(config.BALL_VX)
-                        element.vy = -element.vy
+                        if((new_x >= pad_x and new_x <= pad_x + wid_x)):
+                            if pad_x + gap >= new_x:
+                                element.vx = -2*(config.BALL_VX)
+                                element.vy = -element.vy
+                            elif pad_x + 2*gap >= new_x:
+                                element.vx = -1*(config.BALL_VX)
+                                element.vy = -element.vy
+                            elif pad_x + 3*gap >= new_x:
+                                element.vx = 1*(config.BALL_VX)
+                                element.vy = -element.vy
+                            elif pad_x + 4*gap >= new_x:
+                                element.vx = 2*(config.BALL_VX)
+                                element.vy = -element.vy
 
             if inp == 'a' and self.paddle.x >= config.PADDLE_V:
                 self.paddle.x = self.paddle.x - config.PADDLE_V
@@ -350,9 +352,58 @@ class Window:
         for i in range(self.height):
             print(*self.PrintBoard[i], sep="")
 
+    def movebullets(self):
+        for bullet in self.bullets:
+            bullet.move()
+
+    def renderbullets(self):
+        for bullet in self.bullets:
+            self.Board[bullet.y][bullet.x] = bullet
+
+    def shootingpaddle(self):
+        for powerup in self.powerups:
+            if powerup.utility == "shooting":
+                if powerup.status:
+
+                    bullet1 = Bullet(
+                        self.paddle.x, self.paddle.y-1, 1, 1)
+                    bullet2 = Bullet(
+                        self.paddle.x + self.paddle.width, self.paddle.y-1, 1, 1)
+                    self.bullets.append(bullet1)
+                    self.bullets.append(bullet2)
+                # else:
+                #     self.bullets.clear()
+        # self.renderbullets()
+
+    def handle_bulletcollision(self):
+        for bullet in self.bullets:
+            try:
+                item = self.Board[bullet.y + bullet.vy][bullet.x]
+                if item != None:
+
+                    if item.utility != "unbreakable":
+                        if item.strength > 0:
+                            item.strength += -1
+                            item.display()
+                            bullet.sprite = ' '
+                            bullet.y = 3
+            except:
+                try:
+                    item = self.Board[bullet.y + bullet.vy][bullet.x]
+                    if item != None:
+                        if item.strength > 0:
+                            item.strength += -1
+                            item.display()
+                            bullet.sprite = ' '
+                            bullet.y = 3
+
+                except:
+                    pass
+
     def render(self):
         Key = KeyboardInput()
         BEGIN_TIME = clock()
+        bf = 0
         while True:
             begin = time.monotonic()
 
@@ -378,6 +429,15 @@ class Window:
             inp = Key.kbhit()
             self.movepaddle(inp)
             inp = None
+            if bf == 5:
+                self.shootingpaddle()
+                bf = 0
+            else:
+                bf += 1
+            self.movebullets()
+            self.handle_bulletcollision()
+
+            self.renderbullets()
 
             # adding Balls to the board
             self.renderBalls()
