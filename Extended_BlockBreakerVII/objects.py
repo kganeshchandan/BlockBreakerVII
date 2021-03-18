@@ -77,7 +77,7 @@ class Brick(Entity):
         else:
             self.vy = 0
             self.sprite = ' '
-
+        self.x += self.vx
     # def collide(self, ball):
     #     new_x = ball.x + ball.vx
     #     new_y = ball.y + ball.vy
@@ -144,7 +144,7 @@ class SpecialBrick(Brick):
         self.utility = utility
         self.utility_sprite = utility_sprite
         self.sprite = sprite
-        self.ifbreak()
+        # self.ifbreak()
 
     def display(self):
         if (self.strength == 3):
@@ -158,11 +158,12 @@ class SpecialBrick(Brick):
         #     self.sprite = ' '
         #     del self
 
-    def ifbreak(self):
+    def ifbreak(self, ball_x_velocity, ball_y_velocity):
         if (self.strength == 0 and self.utility != "explode"):
             self.color = Fore.WHITE
             self.sprite = self.utility_sprite
-            self.vy = config.POWERUP_FALL
+            self.vx = ball_x_velocity
+            self.vy = ball_y_velocity
             self.x = int(self.x + self.width / 2)
 
             self.height = config.POWERUP_WIDTH
@@ -198,7 +199,7 @@ class SpecialBrick(Brick):
                     self.strength = 0
                 # self.width = 1
                 self.display()
-                self.ifbreak()
+                self.ifbreak(ball.vx, ball.vy)
 
                 return 1
             else:

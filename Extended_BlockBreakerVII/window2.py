@@ -311,6 +311,7 @@ class Window:
                             self.Board[element.y + k][element.x + i] = element
                             element.move(self.height)
                             self.handle_powercollision(element)
+                            self.handle_bordercollision(element)
                 else:
                     pass
             except:
