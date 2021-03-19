@@ -180,7 +180,8 @@ class Window:
 
     def checkpowerups(self):
         for powerup in self.powerups:
-            powerup.deactivate()
+            if not powerup.validate():
+                powerup.deactivate()
             self.showpowerups(powerup)
             if powerup.utility == "grab" and powerup.status == True:
                 self.grab()
@@ -256,7 +257,6 @@ class Window:
         # timer = 9
         for powerup in self.powerups:
             if powerup.utility == "shooting":
-                self.score = 0
                 if powerup.status == True:
                     timer = clock() - powerup.activation_time
                     timer = config.POWER_UP_TIME - int(timer)
@@ -268,6 +268,8 @@ class Window:
 
     def movepaddle(self, inp):
         if inp:
+            if inp == "x":
+                self.bricks.clear()
             if inp == 'w':
                 for ball in self.entities:
                     if ball.status == "onpaddle":
@@ -483,6 +485,9 @@ class Window:
                         ball.x = self.paddle.x + int(self.paddle.width / 2)
                         ball.y = self.paddle.y - 1
                         self.lives -= 1
+                        for powerup in self.powerups:
+                            powerup.deactivate()
+
                     if self.lives == 0:
                         return self.level, self.lives, self.score
                 else:

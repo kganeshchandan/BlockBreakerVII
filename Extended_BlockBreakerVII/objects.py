@@ -282,40 +282,39 @@ class Power_up():
 
     def deactivate(self):
         if self.status:
-            if not self.validate():
-                if self.utility == "expandpaddle":
-                    self.paddle.width -= config.POWERUP_EXPAND_PADDLE
-                    for ball in self.balls:
-                        if ball.status == "onpaddle":
-                            ball.x = int(self.paddle.x + self.paddle.width / 2)
-                    self.status = False
+            if self.utility == "expandpaddle":
+                self.paddle.width -= config.POWERUP_EXPAND_PADDLE
+                for ball in self.balls:
+                    if ball.status == "onpaddle":
+                        ball.x = int(self.paddle.x + self.paddle.width / 2)
+                self.status = False
 
-                elif self.utility == "shrinkpaddle":
-                    self.paddle.width += config.POWERUP_SHRINK_PADDLE
-                    self.paddle.x -= int(config.POWERUP_SHRINK_PADDLE / 2)
-                    for ball in self.balls:
-                        if ball.status == "onpaddle":
-                            ball.x = int(self.paddle.x + self.paddle.width / 2)
-                    self.status = False
+            elif self.utility == "shrinkpaddle":
+                self.paddle.width += config.POWERUP_SHRINK_PADDLE
+                self.paddle.x -= int(config.POWERUP_SHRINK_PADDLE / 2)
+                for ball in self.balls:
+                    if ball.status == "onpaddle":
+                        ball.x = int(self.paddle.x + self.paddle.width / 2)
+                self.status = False
 
-                elif self.utility == "fireball":
-                    for ball in self.balls:
-                        ball.strength = 1
-                        ball.color = Fore.MAGENTA
-                    self.status = False
-                elif self.utility == "multiball":
-                    self.status = False
+            elif self.utility == "fireball":
+                for ball in self.balls:
+                    ball.strength = 1
+                    ball.color = Fore.MAGENTA
+                self.status = False
+            elif self.utility == "multiball":
+                self.status = False
 
-                elif self.utility == "grab":
-                    for ball in self.balls:
-                        ball.status = "go"
-                        ball.color = Fore.MAGENTA
+            elif self.utility == "grab":
+                for ball in self.balls:
+                    ball.status = "go"
+                    ball.color = Fore.MAGENTA
 
-                    self.status = False
-                elif self.utility == "shooting":
-                    self.paddle.color = Fore.WHITE
-                    self.paddle.sprite = config.BRICK_SPRITE
-                    self.status = False
+                self.status = False
+            elif self.utility == "shooting":
+                self.paddle.color = Fore.WHITE
+                self.paddle.sprite = config.BRICK_SPRITE
+                self.status = False
 
     def validate(self):
         if self.activation_time + config.POWER_UP_TIME < clock():
