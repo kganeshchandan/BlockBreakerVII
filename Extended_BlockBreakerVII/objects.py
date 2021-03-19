@@ -84,8 +84,8 @@ class Brick(Entity):
         if (self.strength == 0):
             self.color = Fore.WHITE
             self.sprite = ' '
-            # self.height = 1
-            # self.width = 1
+            self.height = 1
+            self.width = 1
             del self
 
     def move(self, height):
@@ -120,13 +120,15 @@ class Brick(Entity):
                 # if(self.utility != "unbreakable"):
                 if ball.strength == 1:
                     self.strength = self.strength - 1
+
                     if ball.x < self.x or ball.x > self.x + self.width - 1:
                         ball.vx = -ball.vx
                     else:
                         ball.vy = -ball.vy
                 else:
                     self.strength = 0
-
+                print(self.strength)
+                # print(niggas)
                 self.display()
                 return 1
             else:
@@ -321,3 +323,38 @@ class Power_up():
             return False
         else:
             return True
+
+
+class Boss(Paddle):
+    def __init__(self, x, y, height, width, health, vx=0, vy=1, color=Fore.RED, sprite="╳"):
+        super().__init__(x, y, height, width, color, sprite)
+        self.vx = 1
+        self.vy = 0
+        self.sprite = "╳"
+        self.health = 20
+
+    def move(self, paddle, width):
+        if paddle.x + int(paddle.width / 2) != self.x + int(self.width / 2):
+            if paddle.x + int(paddle.width / 2) < self.x + int(self.width / 2):
+                self.x -= self.vx
+            else:
+                self.x += self.vx
+        if self.x < 2:
+            self.x = 2
+        if self.x + self.width > width - 2:
+            self.x = width - 2 - self.width
+
+
+class Boulder(Entity):
+    def __init__(self, x, y, height, width, strength, vx=0, vy=1, color=Fore.WHITE, sprite="$"):
+        super().__init__(x, y, height, width)
+        self.vy = 1
+        self.vx = 0
+        self.sprite = "$"
+
+    def move(self, height):
+        if self.y + self.vy < height - 5:
+            self.y += self.vy
+        else:
+            self.vy = height - 5
+            self.sprite = ' '

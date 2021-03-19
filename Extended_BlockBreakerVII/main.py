@@ -3,7 +3,7 @@ import time
 import sys
 import termios
 from window2 import Window
-from objects import Ball, Paddle, Brick, SpecialBrick
+from objects import Ball, Paddle, Brick, SpecialBrick, Boss
 from colorama import init
 from colorama import Fore, Back, Style
 from time import monotonic as clock, sleep
@@ -23,7 +23,7 @@ class Game():
         pass
 
     def initialize_brickpattern(self, window):
-        if self.level == 1 or self.level > 2:
+        if self.level == 1:
 
             brick2 = SpecialBrick(
                 10, 10, 20, 10, 4, "rainbow", " ", 0, 0, Fore.GREEN, "█")
@@ -66,20 +66,12 @@ class Game():
                 52, 27, 3, 10, 1, "explode", "", 0, 0, Fore.WHITE, "⣿")
             brickx5 = SpecialBrick(
                 62, 30, 3, 10, 1, "explode", "", 0, 0, Fore.WHITE, "⣿")
-            # brickx6 = SpecialBrick(
-            #     65, 27, 3, 10, 1, "explode", "", 0, 0, Fore.WHITE, "⣿")
 
             brickex = Brick(22, 27, 3, 10, 3)
             brickex1 = Brick(32, 30, 3, 10, 3)
             brickex2 = Brick(42, 27, 3, 10, 3)
             brickex3 = Brick(52, 30, 3, 10, 3)
             brickex4 = Brick(62, 27, 3, 10, 3)
-
-            # window.addBrick(brickex)
-            # window.addBrick(brickex1)
-            # window.addBrick(brickex2)
-            # window.addBrick(brickex3)
-            # window.addBrick(brickex4)
 
             window.addBrick(brick2)
             window.addBrick(brick7)
@@ -101,13 +93,6 @@ class Game():
 
             window.addBrick(brickc)
             window.addBrick(brickz)
-            # window.addBrick(brickx1)
-            # window.addBrick(brickx2)
-            # window.addBrick(brickx3)
-
-            # window.addBrick(brickx4)
-            # window.addBrick(brickx5)
-            # window.addBrick(brickx6)
 
         if self.level == 2:
             brick2 = SpecialBrick(
@@ -145,6 +130,51 @@ class Game():
             window.addBrick(brickx3)
             window.addBrick(brickx4)
             window.addBrick(brickx5)
+        if self.level == 3:
+            brick3 = Brick(10, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+            bricka = Brick(25, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+            brickb = Brick(40, 5, 3, 15, 2,  0, 0, Fore.GREEN, "▒")
+            brick4 = Brick(58, 5, 3, 12, 2, 0, 0, Fore.GREEN, "▒")
+            brick5 = Brick(73, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+
+            brick10 = SpecialBrick(22, 10, 4, 10, 1, "multiball",
+                                   "⤧", 0, 0, Fore.WHITE, "█")
+            brick1 = SpecialBrick(34, 10, 4, 10, 2, "grab",
+                                  "⤓", 0, 0, Fore.WHITE, "█")
+            brick11 = SpecialBrick(51, 10, 4, 10, 2, "unbreakable",
+                                   " ", 0, 0, Fore.WHITE, "░")
+            brick12 = SpecialBrick(63, 10, 4, 10, 1, "multiball",
+                                   "⤧", 0, 0, Fore.WHITE, "█")
+            brick13 = Brick(22, 16, 4, 10, 3,  0, 0, Fore.GREEN, "▒")
+            brick14 = Brick(34, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
+            brick15 = Brick(51, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
+            brick16 = Brick(63, 16, 4, 10, 3, 0, 0, Fore.GREEN, "▒")
+
+            brickc = SpecialBrick(
+                46, 10, 10, 3, 4, "expandpaddle", "⟷", 0, 0, Fore.WHITE, "█")
+            window.addBrick(brick1)
+            window.addBrick(brick10)
+            window.addBrick(brick11)
+            window.addBrick(brick12)
+            window.addBrick(brick14)
+            window.addBrick(brick15)
+            window.addBrick(brick3)
+            window.addBrick(brick4)
+            window.addBrick(brick5)
+            window.addBrick(bricka)
+            window.addBrick(brickb)
+
+        if self.level == 4:
+            brick2 = SpecialBrick(
+                10, 10, 2, 10, 4, "unbreakable", " ", 0, 0, Fore.GREEN, "█")
+            brick7 = SpecialBrick(
+                80, 10, 2, 10, 4, "unbreakable", " ", 0, 0, Fore.WHITE, "█")
+
+            window.addBrick(brick2)
+            window.addBrick(brick7)
+
+            boss = Boss(30, 5, 1, 32, 20, 1, 1, Fore.RED, "╳")
+            window.addBoss(boss)
 
     def initialize_game(self):
         begin = clock()
@@ -160,8 +190,12 @@ class Game():
             window.addPaddle(paddle)
             self.level, self.lives, self.score = window.render()
             if self.lives == 0:
-                print("Game over youe score is :", self.score)
+                print("Game over your score is :", self.score)
                 print("time taken :", clock() - begin)
+                break
+            elif self.lives > 0 and self.level == 5:
+                print("You finished the game your score is :", self.score)
+                print("Time taken :", clock() - begin)
                 break
 
 

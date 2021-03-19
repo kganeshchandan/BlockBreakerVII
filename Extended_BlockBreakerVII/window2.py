@@ -7,7 +7,7 @@ from colorama import init
 from colorama import Fore, Back, Style
 from objects import Entity
 from input import KeyboardInput
-from objects import Power_up, Bullet
+from objects import Power_up, Bullet, Brick, Boulder
 import config as config
 from time import monotonic as clock, sleep
 
@@ -29,7 +29,20 @@ class Window:
         self.score = score
         self.powerups = []
         self.bullets = []
+        self.Boss = None
+        self.boulders = []
     # create the border for the window
+
+    def addBoss(self, boss):
+        self.Boss = boss
+
+    def renderBoss(self):
+        try:
+            for i in range(self.Boss.height):
+                for j in range(self.Boss.width):
+                    self.Board[self.Boss.y + i][self.Boss.x + j] = self.Boss
+        except:
+            pass
 
     def makeborder(self):
         self.PrintBoard = [[None for j in range(self.width)]
@@ -342,13 +355,18 @@ class Window:
                             # self.handle_powercollision(element)
 
     def brickfall(self):
-        for element in self.bricks:
-            if element.strength > 0:
-                element.y += 1
-                if element.y + element.height == self.paddle.y:
-                    self.lives = 0
-            else:
-                del element
+        try:
+            if not self.Boss:
+
+                for element in self.bricks:
+                    if element.strength > 0:
+                        element.y += 1
+                        if element.y + element.height == self.paddle.y:
+                            self.lives = 0
+                    else:
+                        del element
+        except:
+            pass
 
     def renderBalls(self):
         for element in self.entities:
@@ -431,13 +449,92 @@ class Window:
             except:
                 pass
 
+    def showhealth(self):
+        for i in range(self.Boss.health):
+            self.Board[self.height - 3][self.width - 2 -
+                                        i] = Entity(1, 1, 1, 1, Fore.WHITE, "♥")
+
+    def handle_boss_collision(self, element):
+        pad_x = self.Boss.x
+        pad_y = self.Boss.y
+        wid_x = self.Boss.width
+        gap = wid_x/4
+        new_x = element.x + element.vx
+        new_y = element.y + element.vy
+
+        if((new_x >= pad_x and new_x <= pad_x + wid_x) and (new_y == pad_y)):
+            element.vy = -element.vy
+            return True
+        else:
+            return False
+
+    def create_brick(self):
+        try:
+            x = 4
+            for i in range(9):
+                if self.Boss.health == 10:
+                    self.bricks.append(
+                        Brick(x + i*10, 15, 2, 7, 3, 0, 0, Fore.GREEN))
+                else:
+                    self.bricks.append(Brick(x + i*10, 20, 2, 7, 3, 0, 0, Fore.GREEN)
+                                       )
+        except:
+            pass
+
+    def launch_boulder(self):
+        self.boulders.append(Boulder(self.Boss.x + int(self.Boss.width / 2),
+                                     self.Boss.y+1, 1, 1, 1, 0, 1, Fore.WHITE, "$"))
+
+    def render_boulder(self):
+        try:
+            for bomb in self.boulders:
+                self.Board[bomb.y][bomb.x] = bomb
+        except:
+            pass
+
+    def move_boulder(self):
+        for bomb in self.boulders:
+            bomb.move(self.height)
+
+    def handle_boulder_collision(self):
+        for bomb in self.boulders:
+            if self.handle_paddlecollision(bomb):
+                self.lives += -1
+                bomb.y = self.paddle.y + 1
+                bomb.sprite = ' '
+                self.boulders.remove(bomb)
+
+    def runBoss(self):
+        try:
+            for ball in self.entities:
+                if self.handle_boss_collision(ball):
+                    self.score += 1
+                    self.Boss.health += -1
+            self.render_boulder()
+            self.move_boulder()
+            self.showhealth()
+            self.handle_boulder_collision()
+            if self.Boss.health == 10 or self.Boss.health == 5:
+                self.create_brick()
+                self.Boss.health += -1
+
+            self.Boss.move(self.paddle, self.width)
+            self.renderBoss()
+        except:
+            self.handle_boulder_collision()
+            # self.launch_boulder()
+            # self.move_boulder()
+
+            pass
+
     def render(self):
         Key = KeyboardInput()
         BEGIN_TIME = clock()
         bf = 0
+        nf = 0
         while True:
             begin = time.monotonic()
-
+            # if not self.boss:
             if clock() > BEGIN_TIME+config.BRICK_FALL_TIME:
                 for ball in self.entities:
                     if(self.handle_paddlecollision(ball)):
@@ -450,6 +547,15 @@ class Window:
             # show level lives and score
             self.showlevel()
 
+            self.runBoss()
+            if nf == 30:
+                try:
+                    self.launch_boulder()
+                    nf = 0
+                except:
+                    pass
+            else:
+                nf += 1
             # checkpowerups
             self.checkpowerups()
 
@@ -494,8 +600,12 @@ class Window:
                     if ball.y > self.paddle.y:
                         self.entities.remove(ball)
 
-            if self.checkBricks() == 0:
-                return self.level + 1, self.lives, self.score
+            if not self.Boss:
+                if self.checkBricks() == 0:
+                    return self.level + 1, self.lives, self.score
+            else:
+                if self.Boss.health == 0:
+                    return self.level + 1, self.lives, self.score
 
             while time.monotonic() - begin < FRAME_RATE:
                 pass
