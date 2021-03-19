@@ -129,6 +129,7 @@ class Window:
                             # self.Board[j][i].height = 0
                             self.explosion(self.Board[j][i])
                         else:
+                            # print(nigga)
                             self.Board[j][i].strength = 0
                             self.Board[j][i].sprite = " "
                             # self.Board[j][i].height = 0
@@ -153,6 +154,10 @@ class Window:
                 try:
                     if brick.utility == "explode":
                         self.explosion(brick)
+                    for p in self.powerups:
+                        if p.utility == "explodeball":
+                            if p.status == True:
+                                self.explosion(brick)
                 except:
                     pass
 

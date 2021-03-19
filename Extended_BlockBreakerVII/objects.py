@@ -281,6 +281,9 @@ class Power_up():
         elif self.utility == "shooting":
             self.paddle.color = Fore.RED
             self.paddle.sprite = "█"
+        elif self.utility == "explodeball":
+            for ball in self.balls:
+                ball.color = Fore.GREEN
 
     def deactivate(self):
         if self.status:
@@ -317,6 +320,9 @@ class Power_up():
                 self.paddle.color = Fore.WHITE
                 self.paddle.sprite = config.BRICK_SPRITE
                 self.status = False
+            elif self.utility == "explodeball":
+                for ball in self.balls:
+                    ball.color = Fore.MAGENTA
 
     def validate(self):
         if self.activation_time + config.POWER_UP_TIME < clock():

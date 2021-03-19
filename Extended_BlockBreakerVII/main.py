@@ -131,20 +131,20 @@ class Game():
             window.addBrick(brickx4)
             window.addBrick(brickx5)
         if self.level == 3:
-            brick3 = Brick(10, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+            brick3 = Brick(10, 5, 3, 15, 3,  0, 0, Fore.GREEN, "▒")
             bricka = Brick(25, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
-            brickb = Brick(40, 5, 3, 15, 2,  0, 0, Fore.GREEN, "▒")
+            brickb = Brick(37, 5, 3, 21, 3,  0, 0, Fore.GREEN, "▒")
             brick4 = Brick(58, 5, 3, 12, 2, 0, 0, Fore.GREEN, "▒")
-            brick5 = Brick(73, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
+            brick5 = Brick(70, 5, 3, 15, 3,  0, 0, Fore.GREEN, "▒")
 
-            brick10 = SpecialBrick(22, 10, 4, 10, 1, "multiball",
-                                   "⤧", 0, 0, Fore.WHITE, "█")
-            brick1 = SpecialBrick(34, 10, 4, 10, 2, "grab",
-                                  "⤓", 0, 0, Fore.WHITE, "█")
-            brick11 = SpecialBrick(51, 10, 4, 10, 2, "unbreakable",
-                                   " ", 0, 0, Fore.WHITE, "░")
-            brick12 = SpecialBrick(63, 10, 4, 10, 1, "multiball",
-                                   "⤧", 0, 0, Fore.WHITE, "█")
+            brick10 = SpecialBrick(22, 10, 4, 10, 1, "explodeball",
+                                   "*", 0, 0, Fore.WHITE, "█")
+            brick1 = SpecialBrick(34, 10, 4, 10, 2, "explodeball",
+                                  "*", 0, 0, Fore.WHITE, "█")
+            brick11 = SpecialBrick(51, 10, 4, 10, 2, "explodeball",
+                                   "*", 0, 0, Fore.WHITE, "░")
+            brick12 = SpecialBrick(63, 10, 4, 10, 1, "explodeball",
+                                   "*", 0, 0, Fore.WHITE, "█")
             brick13 = Brick(22, 16, 4, 10, 3,  0, 0, Fore.GREEN, "▒")
             brick14 = Brick(34, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
             brick15 = Brick(51, 16, 4, 10, 1,  0, 0, Fore.GREEN, "▒")
