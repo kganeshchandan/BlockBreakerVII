@@ -172,7 +172,7 @@ class Window:
         pad_y = self.paddle.y
         wid_x = self.paddle.width
 
-        if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x):
+        if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x) or (element.y == pad_y + 1 and element.x >= pad_x and element.x <= pad_x + wid_x):
             self.showpowerups(element)
             # element.height = 1
             self.powerups.append(
@@ -368,7 +368,7 @@ class Window:
                     bullet1 = Bullet(
                         self.paddle.x, self.paddle.y-1, 1, 1)
                     bullet2 = Bullet(
-                        self.paddle.x + self.paddle.width, self.paddle.y-1, 1, 1)
+                        self.paddle.x + self.paddle.width - 1, self.paddle.y-1, 1, 1)
                     self.bullets.append(bullet1)
                     self.bullets.append(bullet2)
                 # else:
@@ -400,6 +400,19 @@ class Window:
                 except:
                     pass
 
+    def handle_gravity(self):
+        for brick in self.bricks:
+            try:
+                if brick.utility:
+                    if brick.strength == 0:
+                        brick.vy = brick.vy + int(brick.gravity / 10)
+                        brick.gravity += 1
+                        if brick.vy >= 2:
+                            brick.vy = 2
+                        pass
+            except:
+                pass
+
     def render(self):
         Key = KeyboardInput()
         BEGIN_TIME = clock()
@@ -423,6 +436,7 @@ class Window:
             self.checkpowerups()
 
             # adding bricks
+            self.handle_gravity()
             self.renderBricks()
 
             # checking keyboard responses

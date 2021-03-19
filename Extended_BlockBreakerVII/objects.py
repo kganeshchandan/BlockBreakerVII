@@ -91,7 +91,10 @@ class Brick(Entity):
             self.y = self.vy + self.y
         else:
             self.vy = 0
+            self.y = height - 5
             self.sprite = ' '
+            self.height = 0
+            self.width = 0
         self.x += self.vx
 
     def willtouch(self, ball):
@@ -145,6 +148,7 @@ class SpecialBrick(Brick):
         self.utility_sprite = utility_sprite
         self.sprite = sprite
         # self.ifbreak()
+        self.gravity = 0
 
     def display(self):
         if (self.strength == 3):
@@ -156,6 +160,7 @@ class SpecialBrick(Brick):
         if (self.strength == 0):
             self.color = Fore.WHITE
             self.sprite = ' '
+            self.gravity = 1
             del self
 
     def ifbreak(self, ball_x_velocity, ball_y_velocity):
@@ -184,7 +189,8 @@ class SpecialBrick(Brick):
         new_y = ball.y + ball.vy
 
         if self.willtouch(ball):
-
+            bvx = 0 + ball.vx
+            bvy = 0 + ball.vy
             if(self.strength != 0):
 
                 # if(self.utility != "unbreakable"):
@@ -199,7 +205,7 @@ class SpecialBrick(Brick):
                     self.strength = 0
                 # self.width = 1
                 self.display()
-                self.ifbreak(ball.vx, ball.vy)
+                self.ifbreak(bvx, bvy)
 
                 return 1
             else:

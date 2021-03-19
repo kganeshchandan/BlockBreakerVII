@@ -28,7 +28,7 @@ class Game():
             brick2 = SpecialBrick(
                 10, 10, 20, 10, 3, "shrinkpaddle", "⇄", 0, 0, Fore.GREEN, "█")
             brick7 = SpecialBrick(
-                75, 10, 20, 10, 2, "shooting", "!", 0, 0, Fore.WHITE, "█")
+                75, 10, 20, 10, 1, "shooting", "!", 0, 0, Fore.WHITE, "█")
 
             brick3 = Brick(10, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
             bricka = Brick(25, 5, 3, 12, 2,  0, 0, Fore.GREEN, "▒")
