@@ -113,14 +113,24 @@ class Window:
                         if self.Board[j][i].utility == "explode" and self.Board[j][i].strength != 0:
                             self.Board[j][i].strength = 0
                             self.Board[j][i].sprite = " "
+                            # self.Board[j][i].height = 0
                             self.explosion(self.Board[j][i])
                         else:
                             self.Board[j][i].strength = 0
                             self.Board[j][i].sprite = " "
+                            # self.Board[j][i].height = 0
 
                     except:
                         self.Board[j][i].strength = 0
                         self.Board[j][i].sprite = " "
+                        # self.Board[j][i].height = 0
+        for brick in self.bricks:
+            try:
+                if brick.utility == "explode":
+                    brick.height = 0
+                    brick.width = 0
+            except:
+                pass
 
     def handle_brickcollision(self, element):
         for brick in self.bricks:
@@ -132,6 +142,14 @@ class Window:
                         self.explosion(brick)
                 except:
                     pass
+
+    def rainbow(self):
+        for brick in self.bricks:
+            try:
+                if brick.utility == "rainbow" and brick.rainbow:
+                    brick.changecolor()
+            except:
+                pass
 
     def grab(self):
         pad_x = self.paddle.x
@@ -172,11 +190,12 @@ class Window:
         pad_y = self.paddle.y
         wid_x = self.paddle.width
 
-        if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x) or (element.y == pad_y + 1 and element.x >= pad_x and element.x <= pad_x + wid_x):
+        if (element.y == pad_y and element.x >= pad_x and element.x <= pad_x + wid_x) or (element.y == pad_y - 1 and element.x >= pad_x and element.x <= pad_x + wid_x):
             self.showpowerups(element)
             # element.height = 1
             self.powerups.append(
                 Power_up(self.paddle, self.entities, element.utility, element.utility_sprite))
+            element.y = self.height - 1
 
     def handle_paddlecollision(self, element):
         pad_x = self.paddle.x
@@ -199,6 +218,7 @@ class Window:
             elif pad_x + 4*gap >= new_x:
                 element.vx = 2*(config.BALL_VX)
                 element.vy = -element.vy
+            print("\a")
             return True
         else:
             return False
@@ -214,42 +234,37 @@ class Window:
             self.Board[self.paddle.y][self.paddle.x+i] = self.paddle
 
     def showlevel(self):
-        self.Board[self.height - 3][2] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
-        self.Board[self.height - 3][3] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
-        self.Board[self.height - 3][4] = Entity(1, 1, 1, 1, Fore.WHITE, "V")
-        self.Board[self.height - 3][5] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
-        self.Board[self.height - 3][6] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
-        self.Board[self.height - 3][7] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
-        self.Board[self.height -
-                   3][8] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.level))
+        self.PrintBoard[self.height - 3][2] = "LEVEL :"
+        self.PrintBoard[self.height - 2][2] = "LIVES :"
+        self.PrintBoard[self.height - 2][self.width - 14] = "SCORE :"
+        self.PrintBoard[self.height - 3][9] = str(self.level)
+        self.PrintBoard[self.height - 2][9] = str(self.lives)
+        self.PrintBoard[self.height - 2][self.width - 9] = str(self.score)
+        self.PrintBoard[self.height - 2][self.width - 40] = "TIMER :"
+        for i in range(6):
+            self.PrintBoard[self.height - 3][3+i] = ''
+            self.PrintBoard[self.height - 2][3+i] = ''
+            self.PrintBoard[self.height - 2][self.width - 10 + i] = ''
+            self.PrintBoard[self.height - 2][41 + i] = ''
 
-        self.Board[self.height - 2][2] = Entity(1, 1, 1, 1, Fore.WHITE, "L")
-        self.Board[self.height - 2][3] = Entity(1, 1, 1, 1, Fore.WHITE, "I")
-        self.Board[self.height - 2][4] = Entity(1, 1, 1, 1, Fore.WHITE, "V")
-        self.Board[self.height - 2][5] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
-        self.Board[self.height - 2][6] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
-        self.Board[self.height - 2][7] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
-        self.Board[self.height -
-                   2][8] = Entity(1, 1, 1, 1, Fore.WHITE, str(self.lives))
+        self.PrintBoard[self.height -
+                        2][self.width - 11] = str(self.score % 10)
+        self.PrintBoard[self.height -
+                        2][self.width - 12] = str(int(self.score / 10))
+        self.PrintBoard[self.height - 2][self.width -
+                                         13] = str(int(self.score / 100))
+        # timer = 9
+        for powerup in self.powerups:
+            if powerup.utility == "shooting":
+                self.score = 0
+                if powerup.status == True:
+                    timer = clock() - powerup.activation_time
+                    timer = config.POWER_UP_TIME - int(timer)
 
-        self.Board[self.height - 2][self.width -
-                                    10] = Entity(1, 1, 1, 1, Fore.WHITE, "S")
-        self.Board[self.height - 2][self.width -
-                                    9] = Entity(1, 1, 1, 1, Fore.WHITE, "C")
-        self.Board[self.height - 2][self.width -
-                                    8] = Entity(1, 1, 1, 1, Fore.WHITE, "O")
-        self.Board[self.height - 2][self.width -
-                                    7] = Entity(1, 1, 1, 1, Fore.WHITE, "R")
-        self.Board[self.height - 2][self.width -
-                                    6] = Entity(1, 1, 1, 1, Fore.WHITE, "E")
-        self.Board[self.height - 2][self.width -
-                                    5] = Entity(1, 1, 1, 1, Fore.WHITE, ":")
-        self.Board[self.height -
-                   2][self.width-4] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score/100)))
-        self.Board[self.height -
-                   2][self.width-3] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score/10)))
-        self.Board[self.height -
-                   2][self.width-2] = Entity(1, 1, 1, 1, Fore.WHITE, str(int(self.score % 10)))
+                    self.PrintBoard[self.height -
+                                    2][self.width - 39] = str(int(timer/10))
+                    self.PrintBoard[self.height -
+                                    2][self.width - 38] = str(timer % 10)
 
     def movepaddle(self, inp):
         if inp:
@@ -349,6 +364,7 @@ class Window:
                 else:
                     pixel = ' '
                     self.PrintBoard[i][j] = pixel
+            self.showlevel()
         for i in range(self.height):
             print(*self.PrintBoard[i], sep="")
 
@@ -438,6 +454,7 @@ class Window:
             # adding bricks
             self.handle_gravity()
             self.renderBricks()
+            self.rainbow()
 
             # checking keyboard responses
             inp = Key.kbhit()

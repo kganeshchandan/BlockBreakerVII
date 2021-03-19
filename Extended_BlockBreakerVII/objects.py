@@ -20,11 +20,11 @@ class Entity:
 
 
 class Bullet(Entity):
-    def __init__(self, x, y, height, width, vx=0, vy=-1, color=Fore.WHITE, spite="#"):
+    def __init__(self, x, y, height, width, vx=0, vy=-1, color=Fore.WHITE, spite="⬮"):
         super().__init__(x, y, height, width)
         self.vx = 0
         self.vy = -1
-        self.sprite = "#"
+        self.sprite = "⬮"
 
     def move(self):
         if self.y + self.vy > 3:
@@ -73,6 +73,8 @@ class Brick(Entity):
         self.vy = 0
 
     def display(self):
+        if self.strength > 3:
+            self.color = Fore.WHITE
         if (self.strength == 3):
             self.color = Fore.RED
         if (self.strength == 2):
@@ -149,15 +151,27 @@ class SpecialBrick(Brick):
         self.sprite = sprite
         # self.ifbreak()
         self.gravity = 0
+        self.max_strength = strength
+        self.rainbow = True
+
+    def changecolor(self):
+        if self.utility == "rainbow":
+            self.strength += -1
+            if self.strength == 0:
+                self.strength = self.max_strength
+
+            self.display()
 
     def display(self):
-        if (self.strength == 3):
+        if self.strength > 3:
+            self.color = Fore.WHITE
+        elif (self.strength == 3):
             self.color = Fore.RED
-        if (self.strength == 2):
+        elif (self.strength == 2):
             self.color = Fore.BLUE
-        if (self.strength == 1):
+        elif (self.strength == 1):
             self.color = Fore.GREEN
-        if (self.strength == 0):
+        elif (self.strength == 0):
             self.color = Fore.WHITE
             self.sprite = ' '
             self.gravity = 1
@@ -189,6 +203,7 @@ class SpecialBrick(Brick):
         new_y = ball.y + ball.vy
 
         if self.willtouch(ball):
+            self.rainbow = False
             bvx = 0 + ball.vx
             bvy = 0 + ball.vy
             if(self.strength != 0):
