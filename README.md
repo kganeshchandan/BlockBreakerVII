@@ -1,7 +1,7 @@
 # BlockBreakerVII
 > This is a game completely made by using OOPs principles in python inspired from Atari Break Out
 <p align="center">
-  <img src="https://cdn.discordapp.com/attachments/754022598660063272/825271448801116171/unknown.png" height="1000px"/>
+  <img src="https://cdn.discordapp.com/attachments/754022598660063272/825271448801116171/unknown.png" height="500px"/>
 
   </p>
 To start the game do
